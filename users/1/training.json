@@ -1,1 +1,1 @@
-{"tconnectivity1": [{"duration": "2131", "graph": 10, "visrep": "nl", "answer": "4"}, {"duration": "2131", "graph": 10, "visrep": "nl", "answer": "4"}, {"duration": "1394", "graph": 10, "visrep": "gt", "answer": "4"}, {"duration": "1788", "graph": 10, "visrep": "mx", "answer": "4"}, {"duration": "1788", "graph": 10, "visrep": "mx", "answer": "4"}]}
+{"tconnectivity1": [{"graph": 10, "visrep": "nl", "duration": "1696", "answer": "4"}, {"graph": 10, "visrep": "gt", "duration": "607", "answer": "4"}, {"graph": 10, "visrep": "mx", "duration": "606", "answer": "4"}]}

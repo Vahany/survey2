@@ -4,8 +4,10 @@ h2 {font-size:40px;}
 h3 {font-size:34px;}
 h4 {font-size:30px;}
 
-#next{font-size:24px;width:400px;height:80px;}
+button{font-size:24px;width:400px;height:80px;}
 button:hover{cursor:pointer}
+
+.replays{width:150px;}
 
 
 .warning{color:red;}

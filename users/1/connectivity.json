@@ -1,1 +1,1 @@
-{"connectivity1": [{"visrep": "nl", "graph": 1, "question": "1", "answer": "4", "duration": "15180"}, {"visrep": "nl", "graph": 1, "question": "2", "answer": "1", "duration": "2487"}, {"graph": 2, "visrep": "gt", "answer": "1", "question": "3", "duration": "15071"}]}
+{"connectivity1": [{"answer": "1", "visrep": "nl", "question": "1", "duration": "541", "graph": 1}]}

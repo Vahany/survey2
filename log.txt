@@ -1,1 +1,1 @@
-{"visrep": "mx", "filename": "tmatching", "duration": "896", "answers": "C", "graph3": 12, "userid": 5, "refgraph": 12, "question": "3", "graph2": 2, "graph1": 6}
+{"filename": "connectivity1", "visrep": "nl", "question": "1", "duration": "541", "graph": 1, "userid": 1, "answers": "1"}

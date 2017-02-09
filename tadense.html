@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+var demo = [[5,8],[8,5],[5,8]];
+var thecorrectanswer = 5;
+
+var duration;
+var progressbarinner;
+var image_loaded = false;
+
+var mode;
+var picked;
+
+var isnextclicked;
+
+
+function createProgressbar(id, duration, callback) {
+  // We select the div that we want to turn into a progressbar
+  var progressbar = document.getElementById(id);
+  progressbar.className = 'progressbar';
+  // We create the div that changes width to show progress
+  progressbarinner = document.createElement('div');
+  progressbarinner.className = 'inner';
+  // Now we set the animation parameters
+  progressbarinner.style.animationDuration = duration;
+  // Eventually couple a callback
+  if (typeof(callback) === 'function') {
+    progressbarinner.addEventListener('animationend', callback);
+  }
+  // Append the progressbar to the main progressbardiv
+  progressbar.appendChild(progressbarinner);
+  // When everything is set up we start the animation
+  progressbarinner.style.animationPlayState = 'running';
+}
+
+
+function init(){
+	isnextclicked = false;
+	var myurl = window.location.href;
+	mode = myurl.substring(myurl.indexOf('type=')+5,myurl.indexOf('type=')+7)
+	questionnum = myurl.substring(myurl.indexOf('question=')+9,myurl.indexOf('&duration'))
+	duration = myurl.substring(myurl.indexOf('duration=')+9)
+	//alert(mode);
+	document.getElementById('next').disabled = true;
+	//on clicking next save duration and value if value is wrong show them an alert
+	document.getElementById('next').onclick=function(){
+		isnextclicked = true;
+		document.getElementById('next').disabled = true;
+		//first save
+		save();
+	};
+	
+	var myradios = document.getElementsByClassName("myradio");
+	for (var i =0; i<myradios.length; i++){
+		myradios[i].onclick = function(){
+			if (!isnextclicked){
+				document.getElementById('next').disabled = false;
+				this.style.border = "5px solid blue";
+				this.style.color = "blue";
+				picked = this.id;
+				for (var j=0;j<myradios.length; j++){	
+					if (myradios[j]!=this){
+						myradios[j].style.border = "1px solid black";
+						myradios[j].style.color = "black";
+					}
+				}
+			}
+		}
+	}
+
+}
+
+function move_on(){
+	if (picked!=thecorrectanswer[parseInt(questionnum)-1]){
+		document.getElementById(picked).style.border = "5px solid red";
+		document.getElementById(picked).style.color = "red";
+		
+		setTimeout(function(){
+			window.location.replace('tqdense.html?type='+mode+'&question='+questionnum);
+		},1000);
+	}
+	else{
+		document.getElementById(picked).style.border = "5px solid green";
+		document.getElementById(picked).style.color = "green";
+		setTimeout(function(){
+			var newmode;
+			if (mode == "nl") newmode = "gt";
+			if (mode == "gt") newmode = "mx";
+			if (questionnum == "3") {
+				window.location.replace('dense.html?question=1');
+			}
+			else window.location.replace('tqdense.html?type='+newmode+'&question='+String(parseInt(questionnum)+1));
+
+		},1000);
+	}
+}
+
+function save(){
+	d3.json("data/users.json",function(users){
+		userid = users.usercount;
+		
+		var thepicked;
+		if (picked == "A") thepicked = demo[parseInt(questionnum)-1][0];
+		else if (picked == "B") thepicked = demo[parseInt(questionnum)-1][1];
+		console.log(userid);
+		var iscorrect;
+		iscorrect = (thepicked == thecorrectanswer);
+
+		var savejson = {"filename":"tdense","userid":userid,"visrep":mode,"graph1":demo[parseInt(questionnum)-1][0],"graph2":demo[parseInt(questionnum)-1][1],"answers":picked,"question":questionnum, "correct":iscorrect, "correctanswer":thecorrectanswer, "duration":duration};
+		$.ajax({
+			type: 'POST',
+			url: 'cgi-bin/savetofile.py',//url of receiver file on server
+			dataType: "json",
+			data: JSON.stringify(savejson), //your data
+			success: function (response) {
+				move_on();
+			}
+		});
+		
+	});
+}
+
+window.onload=init;
+</script>
+
+</head>
+<body>
+
+
+	<div class="main_div" align=center height="800px">
+		<br /><br />
+		<div align=center id="answers">
+			
+			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
+			<div class="myradio" id="A">A</div><div class="myradio" id="B">B</div>
+		</div>
+		<br /><br />
+		<div align=center id="buttonnext" style="clear:left">
+			<button type="button" id="next">Next</button>
+		</div>
+		
+		
+	</div>
+
+</body>
+</html>

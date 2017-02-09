@@ -24,7 +24,7 @@ if (filename.find('tute') != -1):
         file.close()
         file = open('users//'+str(userid)+'//tutorial.json','w')
         file.write(json.dumps(existing))
-elif (filename.find('tconnectivity1') != -1):
+elif (filename.find('tconnectivity') != -1):
     if (os.path.isfile('users//'+str(userid)+'//training.json')): 
         file = open('users//'+str(userid)+'//training.json','r')
         existing = json.load(file)
@@ -54,10 +54,10 @@ elif (filename.find('connectivity') != -1):
         file = open('users//'+str(userid)+'//connectivity.json','w')
         file.write(json.dumps({filename:[{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph':input['graph']}]}))
 elif (filename.find('matching') != -1):
-	if (filename.find('tmatching') != -1):
-		jsonname = 'users//'+str(userid)+'//training.json'
-	else:
-		jsonname = 'users//'+str(userid)+'//matching.json'
+    if (filename.find('tmatching') != -1):
+        jsonname = 'users//'+str(userid)+'//training.json'
+    else:
+        jsonname = 'users//'+str(userid)+'//matching.json'
     if (os.path.isfile(jsonname)): 
         file = open(jsonname,'r')
         existing = json.load(file)
@@ -71,8 +71,26 @@ elif (filename.find('matching') != -1):
     else:
         file = open(jsonname,'w')
         file.write(json.dumps({'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'refgraph':input['refgraph'],'graph1':input['graph1'],'graph2':input['graph2'],'graph3':input['graph3'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']}))
-else:
-    logfile.write('not tutorial\n')
+elif (filename.find('dense') != -1):
+    if (filename.find('tdense') != -1):
+        jsonname = 'users//'+str(userid)+'//training.json'
+    else:
+        jsonname = 'users//'+str(userid)+'//dense.json'
+    if (os.path.isfile(jsonname)): 
+        file = open(jsonname,'r')
+        existing = json.load(file)
+        if filename in existing:
+            existing[filename].append({'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph1':input['graph1'],'graph2':input['graph2'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']})
+        else:
+            existing[filename] = [{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph1':input['graph1'],'graph2':input['graph2'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']}]
+        file.close()
+        file = open(jsonname,'w')
+        file.write(json.dumps(existing))
+    else:
+        file = open(jsonname,'w')
+        file.write(json.dumps({'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph1':input['graph1'],'graph2':input['graph2'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']}))
+elif (filename.find('background') != -1):
+    logfile.write('background\n')
     file = open('users//'+str(userid)+'//'+filename+'.json','w')
     file.write(json.dumps({'answers':answers, 'duration':input['duration']}))
 

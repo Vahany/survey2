@@ -9,7 +9,7 @@
 
 <script>
 
-var questions = [[1,1,2,10],[2,13,3,9],[3,16,7,37],[4,4,5,12],[5,22,8,40],[6,6,38,11],[7,28,31,34],[8,32,23,19],[9,35,29,39],[10,10,14,30]];
+var questions = [[7,8],[6,10],[3,6],[4,5],[1,2],[2,3],[2,12],[1,9],[5,7],[4,7]];
 
 var start;
 var progressbarinner;
@@ -22,22 +22,17 @@ function createProgressbar(id, duration, callback) {
   // We select the div that we want to turn into a progressbar
   var progressbar = document.getElementById(id);
   progressbar.className = 'progressbar';
-
   // We create the div that changes width to show progress
   progressbarinner = document.createElement('div');
   progressbarinner.className = 'inner';
-
   // Now we set the animation parameters
   progressbarinner.style.animationDuration = duration;
-
   // Eventually couple a callback
   if (typeof(callback) === 'function') {
     progressbarinner.addEventListener('animationend', callback);
   }
-
   // Append the progressbar to the main progressbardiv
   progressbar.appendChild(progressbarinner);
-
   // When everything is set up we start the animation
   progressbarinner.style.animationPlayState = 'running';
 }
@@ -45,53 +40,50 @@ function createProgressbar(id, duration, callback) {
 
 
 	
-
-
+	
 d3.json("data/users.json",function(users){
 	image_loaded = [];
 	var myurl = window.location.href;
 	questionnum = myurl.substring(myurl.indexOf('question=')+9);
 
-	mode = users.matching.currentmode;
-	order = users.matching.currentorder;
-	thequestion = users.matching.currentidx;
+	mode = users.dense.currentmode;
+	order = users.dense.currentorder;
+	thequestion = users.dense.currentidx;
 
 	var intmode, midx;
-	if (mode == "mx") {intmode = 3; midx = 0;}
+	if (mode == "nl") {intmode = 2; midx = 0;}
 	else if (mode == "gt") {intmode = 1; midx = 1;}
+	else if (mode == "mx") {intmode = 3; midx = 2;}
 	
 	var mygraphs = [];
-	mygraphs.push(questions[parseInt(thequestion[midx])][0]);
+
 	mygraphs.push(questions[parseInt(thequestion[midx])][order[0]]);
 	mygraphs.push(questions[parseInt(thequestion[midx])][order[1]]);
-	mygraphs.push(questions[parseInt(thequestion[midx])][order[2]]);
 	
-	var my_image = document.getElementById("0");
-	my_image.src = "images/matching/"+String(mygraphs[0])+"."+String(intmode)+".png";
 	var nl_image;
-	for (var ii=1; ii<=3;ii++){
+	for (var ii=0; ii<=1;ii++){
 		nl_image = document.getElementById(String(ii));
-		nl_image.src = "images/matching/"+String(mygraphs[ii])+".2.png";
+		nl_image.src = "images/matching/"+String(mygraphs[ii])+"."+String(intmode)+".png";
 	}
 });
 
 
 
 function move_on(){
-	if (image_loaded.length == 4){
+	if (image_loaded.length == 2){
 		var end = new Date().getTime();
 		var thetime = end - start;
-		window.location.replace('amatching.html?type='+mode+'&question='+String(questionnum)+'&duration='+String(thetime));
+		window.location.replace('adense.html?type='+mode+'&question='+String(questionnum)+'&duration='+String(thetime));
 	}
 }
 
 function xload(elem){
   if (image_loaded.indexOf(parseInt(elem.id)) == -1 )
 	image_loaded.push(parseInt(elem.id));
-  if (image_loaded.length == 4){
+  if (image_loaded.length == 2){
 	document.getElementById("imagewrapper").style.display = "block";
 	start = new Date().getTime();
-	createProgressbar('progressbar1', '40s', move_on);
+	createProgressbar('progressbar1', '10s', move_on);
 	document.body.onkeyup = function(e){
 		if(e.keyCode == 32){
 			move_on();
@@ -101,7 +93,7 @@ function xload(elem){
 }
 
 
-
+window.onload=init;
 </script>
 
 </head>
@@ -115,32 +107,14 @@ function xload(elem){
 		
 		<div id='imagewrapper' style="height:150px; display:none">
 			<div id='myimages'>
-				<div id="top">
-					<img class="survey_img" id="0"  onload="xload(this)"/>
-				</div>
-				<div id="bottom">
-					<img class="survey_img" id="1" onload="xload(this)"/>
-					<img class="survey_img" id="2" onload="xload(this)"/>
-					<img class="survey_img" id="3" onload="xload(this)"/>
-				</div>
-				<div id="bottomlabels">
-					<p style="word-spacing:160px; font-weight:bold">A B C</p>
+				<img class="survey_img" id="0" onload="xload(this)"/>
+				<img class="survey_img" id="1" onload="xload(this)"/>
 
+				<p style="word-spacing:160px; font-weight:bold">A B</p>
 
-					<!--
-					<img class="survey_img" src="images/A.png"/>
-					<img class="survey_img" src="images/B.png"/>
-					<img class="survey_img" src="images/A.png"/>
-					-->
-				</div>
-				<div style="margin-top:50px">
-					<p id="msg" style="font-weight:bold; color:red"></p>
-				<div>
 			</div>
 		</div>
-		
-		
-		
+	
 	</div>
 
 </body>
