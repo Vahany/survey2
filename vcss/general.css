@@ -1,0 +1,70 @@
+body {font-size:24px;}
+h1 {font-size:50px;}
+h2 {font-size:40px;}
+h3 {font-size:34px;}
+h4 {font-size:30px;}
+
+#next{font-size:24px;width:400px;height:80px;}
+button:hover{cursor:pointer}
+
+
+.warning{color:red;}
+
+.footerContacts{display:inline-block;margin-left:10px;margin-right:10px;}
+
+label{font-size:28px;}
+
+.main_div{margin-left:50px; margin-right:50px;}
+.survey_img{width:150;height:150;border:0px solid black; padding:20px}
+
+#tutorialtext{font-size:34px;}
+
+.matrixg rect{fill:white;}
+
+.child circle {fill: none;}
+
+label {cursor:pointer}
+input {cursor: pointer}
+
+.rotate90 {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.myradio { width:100px; height:100px; line-height: 100px;
+
+  text-align: center; margin: 10px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;}
+ 
+ .progressbar {
+  width: 80%;
+  margin: 25px auto;
+  border: solid 1px #000;
+}
+.progressbar .inner {
+  height: 15px;
+  animation: progressbar-countdown;
+  /* Placeholder, this will be updated using javascript */
+  animation-duration: 40s;
+  /* We stop in the end */
+  animation-iteration-count: 1;
+  /* Stay on pause when the animation is finished finished */
+  animation-fill-mode: forwards;
+  /* We start paused, we start the animation using javascript */
+  animation-play-state: paused;
+  /* We want a linear animation, ease-out is standard */
+  animation-timing-function: linear;
+}
+@keyframes progressbar-countdown {
+  0% {
+    width: 100%;
+    background: #0F0;
+  }
+  100% {
+    width: 0%;
+    background: #F00;
+  }
+}
+

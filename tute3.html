@@ -1,0 +1,320 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<style>
+	#matrixg rect{fill: white;stroke:rgb(0,0,0);stroke-width:1;}
+	#matrixg line{stroke:rgb(0,0,0);stroke-width:1;}
+	svg {padding-left:10px;}
+</style>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="extern/reorder/lib/science.v1.js"></script>
+<script src="extern/reorder/lib/tiny-queue.js"></script>
+<script src="extern/reorder/reorder.v1.js"></script>
+<script src="src/matrix.js"></script>
+<script src="src/force.js"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+
+
+<script>
+var start, end;
+
+var mygraph = {"nodes":[{"name":"A"},{"name":"B"},{"name":"C"},{"name":"D"},{"name":"E"},{"name":"F"},{"name":"G"},{"name":"H"},{"name":"I"},{"name":"J"},{"name":"K"}],"links":[{"source":0,"target":1},{"source":1,"target":2},{"source":1,"target":3},{"source":1,"target":4},{"source":2,"target":3},{"source":2,"target":4},{"source":3,"target":4},{"source":3,"target":5},{"source":3,"target":6},{"source":6,"target":7},{"source":6,"target":8},{"source":7,"target":8},{"source":8,"target":9},{"source":2,"target":10}]};
+var size = {"width": 300, "height":300};
+var svg1, svg2, svg3,svg4;
+var thematrix;
+
+var margin ={"x":"30","y":"30"};
+var x = d3.scale.ordinal().rangeBands([0, size.width-parseInt(margin.x)]);
+//var c = d3.scale.category10().domain(d3.range(10));
+//var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#feb24c'; else return '#fd8d3c';};
+var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#fd8d3c'; else return '#e31a1c';};
+var z = d3.scale.linear().domain([0, 1]).clamp(true);
+
+var myscale, minx, miny;
+var both_drawn;
+
+
+var mygroups = [3,5,5,5,5,3,4,4,4,3,3];
+var triggered = false;
+var newfunction;
+
+
+function init(){
+ for (var i=0; i < mygraph.nodes.length; i++){
+	mygraph.nodes[i]["group"] = 1;
+ }
+
+
+ svg1 = d3.select("#chart").append("svg").attr("id","matrixsvg").attr("width",size.width).attr("height",size.height);
+ 
+ 
+ svg2 = d3.select("#chart").append("svg").attr("id","nodelinksvg").attr("width",size.width).attr("height",size.height);
+ 
+ 
+ 
+ both_drawn = 0;
+
+
+ draw_matrix(svg1, "matrixg", function(){
+	both_drawn++;
+	iterateNodes(0);
+
+ }); 
+ draw_force(svg2, "nodeg", function(){
+	both_drawn++;
+	iterateNodes(0);
+
+ });
+ 
+
+
+
+ 
+
+ 
+
+ 
+ 
+ 
+
+ 
+ 
+
+ 
+ d3.json("data/users.json",function(users){
+		userid = users.usercount;
+		
+		
+		console.log(userid);
+
+		start = new Date().getTime();
+		document.getElementById('next').onclick=function(){
+			end = new Date().getTime();
+			var duration = end - start;
+			
+			var savejson = {"filename":"tute3","userid":userid,"answers":[], "duration":duration};
+			$.ajax({
+				type: 'POST',
+				url: 'cgi-bin/savetofile.py',//url of receiver file on server
+				dataType: "json",
+				data: JSON.stringify(savejson), //your data
+				success: function (response) {
+					window.location.replace('connectivityintro1.html');
+				}
+			});
+		};
+		
+	});
+ 
+}
+
+
+window.onload=init;
+ 
+
+function replay(fn){
+	triggered = true;
+	newfunction = fn;
+	/*
+	if (all_drawn == 6){
+		all_drawn = 0;
+		both_drawn = 2;
+		fn(0);
+	}
+	else{
+		mygraph.nodes.forEach(function(node){
+			node.group = 1;
+		});
+		update_matrix(function(){
+			all_drawn++;
+			replay(fn);
+		});
+		update_force(function(){
+			all_drawn++;
+			ireplay(fn);
+		});
+		mygraph.links.forEach(function(link){
+			link.group = 1;
+		});
+		update_matrix_links(function(){
+			all_drawn++;
+			replay(fn);
+		});
+		update_force_links(function(){
+			all_drawn++;
+			replay(fn);
+		});
+		mygraph.nodes.forEach(function(node){
+			node.group = 1;
+		});
+		color_mx_groups(function(){
+			all_drawn++;
+			replay(fn);
+		});
+		color_nl_groups(function(){
+			all_drawn++;
+			replay(fn);
+		});
+	}*/
+ }
+ 
+ 
+  function changeColor(con){
+	if (both_drawn){
+		triggered = false;
+		both_drawn = 0;
+		setTimeout(function(){
+			if ((con == 3) || (triggered)){
+				mygraph.nodes.forEach(function(node){
+					node.group = 1;
+				});
+				color_mx_groups(function(){
+					both_drawn++;
+					if (triggered) {newfunction(0);}
+					else iterateNodes(0);
+				});
+				color_nl_groups(function(){
+					both_drawn++;
+					if (triggered) {newfunction(0);}
+					else iterateNodes(0);
+				});
+			}
+			else{
+				mygraph.nodes.forEach(function(node, idx){
+					if (mygroups[idx] > con+3) node.group = con+3;
+					else node.group = mygroups[idx];
+				});
+				color_mx_groups(function(){
+					both_drawn++;
+					changeColor(con+1);
+				});
+				color_nl_groups(function(){
+					both_drawn++;
+					changeColor(con+1);
+				});
+			}
+		},4000);
+	}
+ 
+ 
+ }
+	
+ 
+ 
+ function iterateNodes(i){
+	if (both_drawn == 2){
+		triggered = false;
+		both_drawn = 0;
+		setTimeout(function(){
+			if (( i == mygraph.nodes.length) || (triggered)){
+				mygraph.nodes.forEach(function(node){
+					node.group = 1;
+				});
+				update_matrix(function(){
+					both_drawn++;
+					if (triggered) {newfunction(0);}
+					else iterateLinks(0);
+				});
+				update_force(function(){
+					both_drawn++;
+					if (triggered) {newfunction(0);}
+					else iterateLinks(0);
+				});
+			}
+			else{
+				mygraph.nodes.forEach(function(node, idx){
+					if (idx == i) node.group = 2;
+					else node.group = 1;
+				});
+				update_matrix(function(){
+					both_drawn++;
+					iterateNodes(i+1);
+				});
+				update_force(function(){
+					both_drawn++;
+					iterateNodes(i+1);
+				});
+			}
+		},1500);
+	}
+ }
+ 
+ function iterateLinks(i){
+	if (both_drawn == 2){
+		triggered = false;
+		both_drawn = 0;
+		setTimeout(function(){
+			if (( i == mygraph.links.length) || (triggered)){
+				mygraph.links.forEach(function(link){
+					link.group = 1;
+				});
+				update_matrix_links(function(){
+					both_drawn++;
+					if (triggered) {newfunction(0);}
+					else changeColor(0);
+				});
+				update_force_links(function(){
+					both_drawn++;
+					if (triggered) {newfunction(0);}
+					else changeColor(0);
+				});
+			}
+			else{
+				mygraph.links.forEach(function(link, idx){
+					if (idx == i) link.group = 2;
+					else link.group = 1;
+				});
+				update_matrix_links(function(){
+					both_drawn++;
+					iterateLinks(i+1);
+				});
+				update_force_links(function(){
+					both_drawn++;
+					iterateLinks(i+1);
+				});
+			}
+		},1500);
+	}
+ }
+ 
+</script>
+
+</head>
+<body>
+	<div class="main_div">
+		<p>This is yet another representation of the same network.</p>
+		<p>It is called an adjacency matrix.</p>
+
+		<p>Each row and column represent a node in the network.</p>
+
+		<p>Each cell represents a link in the network.</p>
+		<p>The intersection of a row and a column represents the link between those nodes.</p>
+		
+		<div>
+		
+		
+		<div id="chart" style="float:left; font-family:Sans-Serif">
+			
+			
+		</div>
+		<div style="float:left; margin-left:50px; margin-top:50px;">
+			<button type="button" id="rn" style="width:150px" onclick="replay(iterateNodes);">Replay nodes</button><br />
+			<button type="button" id="rl" style="width:150px" onclick="replay(iterateLinks);">Replay links</button><br />
+			<button type="button" id="rc" style="width:150px" onclick="replay(changeColor);">Replay components</button><br />
+		</div>
+		<div style="clear:left"></div>
+		</div>
+
+		<p>We order the rows and columns of the matrix, so that the highly connected parts of the network form visible blocks.</p>
+		
+		<br />
+		<br />
+		<div align=center>
+			<button type="button" id="next">Next</button>
+		</div>
+	</div>
+</body>
+</html>

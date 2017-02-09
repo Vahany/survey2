@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+<script>
+function init(){
+	
+	document.getElementById('next').onclick=function(){
+		window.location.replace('tqdense.html?type=nl');
+	}
+}
+
+window.onload=init;
+</script>
+
+</head>
+<body>
+	
+	<div class="main_div" style="margin-top:50px">
+		<div width=100% align=center>
+			<h2>Section 5/5: Detection</h2>
+		</div>
+		<div id="tutorialtext">
+		
+		<p>The next section has 33 questions.</p>
+		<p>The first three are for training.</p>
+		<p>You will be shown a pair of networks side by side using the same visual representation.</p>
+		<p>You need to detect the one that has more links than the other..</p>
+		<p>Keep the letter (A or B) in mind and press space when ready.</p>
+		<p>There is a 10 seconds timeout.</p>
+		<p>Your performance will be timed.</p>
+		<p>You will be able to input your result on the following page, which will not be timed.</p>
+		<p>Click NEXT when you're ready to see the next question.</p>
+		<br />
+		</div>
+	
+	<br />
+	<br />
+	
+	<div align=center id="buttonnext">
+		<button type="button" id="next">Next</button>
+	</div>
+		
+	</div>
+</body>
+</html>

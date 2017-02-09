@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="http://www.w3schools.com/lib/w3data.js"></script>
+<script>
+function init(){
+    document.getElementById('start').onclick=function(){
+		window.location.replace('background.html');
+	};
+}
+window.onload=init;
+</script>
+</head>
+<body>
+	<div w3-include-html="headertemplate.html"></div> 
+	<div w3-include-html="introduction.html"></div> 
+
+	<br />
+	<div align=center>
+	<button type="button" id="start">I Understand</button>
+	</div>
+	<div w3-include-html="footertemplate.html"></div> 
+	<script>
+		w3IncludeHTML();
+	</script>
+</body>
+</html>

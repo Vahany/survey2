@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script>
+var start, end;
+function init(){
+
+	d3.json("data/users.json",function(users){
+		userid = users.usercount;
+		
+		
+		console.log(userid);
+
+		start = new Date().getTime();
+		document.getElementById('next').onclick=function(){
+			end = new Date().getTime();
+			var duration = end - start;
+			
+			var savejson = {"filename":"tute1","userid":userid,"answers":[], "duration":duration};
+			$.ajax({
+				type: 'POST',
+				url: 'cgi-bin/savetofile.py',//url of receiver file on server
+				dataType: "json",
+				data: JSON.stringify(savejson), //your data
+				success: function (response) {
+					window.location.replace('tute2.html');
+				}
+			});
+		};
+		
+	});
+	
+}
+window.onload=init;
+</script>
+
+</head>
+<body>
+	<div class="main_div">
+		<p>This is an example of a network diagram.</p>
+		<img src="images/tutorial/force2.PNG" width=300 />
+		<p>The nodes (circles) represent the objects of the network and the links (lines) represent the relationships between these objects.</p>
+		
+		<p>Connected components of a network are subsets of nodes, where any node in the subset is reachable from every other node within the same subset. </p>
+		<p>The network above has two connected components.</p>
+		
+		<p>If we added a link between these two connected components, then we have one connected component, as shown below.</p>
+		<img src="images/tutorial/force1.PNG" width=300 />
+		
+		<p>Similar to connected components, networks can have 2-connected components.</p>
+		<p>2-connected components are the subset of nodes that have at least two paths to every other node within the subset.</p>
+		<p>2-connected components are also 1-connected.</p>
+		
+		<img src="images/tutorial/1-outlined.PNG" width=300 />
+		<p>The network above has two 2-connected components, which are highlighted.</p>
+		<img src="images/tutorial/3.PNG" width=300 />
+		 <p>Let's consider the 2-connected component on the right.</p>
+		 <p>All the nodes in the highlighted subset have at least two paths to every other node within this subset.</p>
+		
+		<p>If we consider these two nodes</p>
+		<img src="images/tutorial/4.PNG" width=300 />
+		<p>they are connected by this path</p>
+		<img src="images/tutorial/path1.PNG" width=300 />
+		<p>and also this path</p>
+		<img src="images/tutorial/path2.PNG" width=300 />
+		<p>similarly if we consider these two nodes</p>
+		<img src="images/tutorial/7.PNG" width=300 />
+		<p>they are connected by at least two paths</p>
+		<img src="images/tutorial/path3.PNG" width=300 />
+		<img src="images/tutorial/path4.PNG" width=300 />
+		
+		<p>However these two nodes only have one path to each other and are not part of any 2-connected component.</p>
+		<img src="images/tutorial/not2.PNG" width=300 />
+		
+		
+
+		<br />
+		<br />
+		<div align=center>
+			<button type="button" id="next">Next</button>
+		</div>
+	</div>
+</body>
+</html>

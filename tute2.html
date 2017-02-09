@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script>
+var start, end;
+function init(){
+
+
+	d3.json("data/users.json",function(users){
+		userid = users.usercount;
+		
+		
+		console.log(userid);
+		
+		
+		start = new Date().getTime();
+		document.getElementById('next').onclick=function(){
+			end = new Date().getTime();
+			var duration = end - start;
+			
+			var savejson = {"filename":"tute2","userid":userid,"answers":[], "duration":duration};
+			$.ajax({
+				type: 'POST',
+				url: 'cgi-bin/savetofile.py',//url of receiver file on server
+				dataType: "json",
+				data: JSON.stringify(savejson), //your data
+				success: function (response) {
+					window.location.replace('tute3.html');
+				}
+			});
+		};
+		
+	});
+}
+window.onload=init;
+</script>
+
+</head>
+<body>
+	<div class="main_div">
+
+		
+		<p>This two images show different representations of the same network.</p>
+		<p>The one on the left is called a Graph Thumbnail.</p>
+		<img src="images/tutorial/thumbnail.png" width=300 style="border: 2px solid;" />
+		<img src="images/tutorial/force.PNG" width=300 />
+		<p>If we break down the Graph Thumbnail into its different components.</p>
+		<p>The yellow (outermost) circle represents all the connected nodes of the network.</p>
+		<img src="images/tutorial/redc.PNG" width=300 style="border: 2px solid;" />
+		<img src="images/tutorial/redf.PNG" width=300 />
+		<p>The light orange circles represent the 2-connected components (the subset of nodes that have at least two distinct paths to every other node within the subset). There are two 2-connected components in this network.</p>
+		<img src="images/tutorial/orangec.PNG" width=300 style="border: 2px solid;" />
+		<img src="images/tutorial/orangef.PNG" width=300 />
+		<p>The dark orange circles represent the 3-connected components of a network (the subset of nodes that have at least three distinct paths to every other node within the subset).</p>
+		<img src="images/tutorial/pinkc.PNG" width=300 style="border: 2px solid;" />
+		<img src="images/tutorial/pinkf.PNG" width=300 />
+		<p>The size of the circles, except from the outermost one, are related to the number of nodes within that component.</p>
+		<img src="images/tutorial/gt-nl.gif" width=600 />
+		<p>The more connected a component is, the darker the colour of the circle is.</p>
+		
+
+		<br />
+		<br />
+		<div align=center>
+			<button type="button" id="next">Next</button>
+		</div>
+	</div>
+</body>
+</html>

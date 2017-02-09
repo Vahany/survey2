@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+<script>
+function init(){
+	
+	document.getElementById('next').onclick=function(){
+		window.location.replace('tqmatching.html?type=gt&question=1');
+	}
+}
+
+window.onload=init;
+</script>
+
+</head>
+<body>
+	
+	<div class="main_div" style="margin-top:50px">
+		<div width=100% align=center>
+			<h2>Section 4/5: Matching</h2>
+		</div>
+		<div id="tutorialtext">
+		
+		<p>The next section has 24 questions.</p>
+		<p>The first four are for training.</p>
+		<p>You will be shown a reference network using either a Graph Thumbnail or matrix diagram.</p>
+		<p>You will also be shown three networks (A, B, C) using the node-link representation.</p>
+		<p>One of these three networks is the same as the reference network.</p>
+		<p>You need to find the matching network.</p>
+		<p>Keep the letter (A, B, C) in mind and press space when ready to answer the question.</p>
+		<p>There is a 40 seconds timeout.</p>
+		<p>Your performance will be timed.</p>
+		<p>You will be able to input your result on the following page, which will not be timed.</p>
+		<p>Click NEXT when you're ready to see the next question.</p>
+		<br />
+		</div>
+	
+	<br />
+	<br />
+	
+	<div align=center id="buttonnext">
+		<button type="button" id="next">Next</button>
+	</div>
+		
+	</div>
+</body>
+</html>

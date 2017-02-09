@@ -1,10 +1,23 @@
 {
   "name": "survey2",
   "version": "0.0.1",
+  "description": "GraphThumbnails Matching Study",
+  "repository": {
+    "type": "git",
+    "url": "git+//github.com/Vahany/survey2.git"
+  },
   "dependencies": {
     "express": "^4.10.6",
     "mysql": "^2.5.4",
 	"fs-extra": "2.0.0",
-	"d3": "4.0.0"
+	"d3": "4.0.0",
+	"path": "0.12.7",
+	"browserify": "^14.0.0",
+	"babelify": "^7.3.0",
+	"gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+	"gulp-connect": "^5.0.0",
+    "gulp-open": "^2.0.0",
+	"vinyl-source-stream": "^1.1.0"
   }
 }

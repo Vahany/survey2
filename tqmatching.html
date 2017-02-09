@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+
+<script>
+
+var demo = [[11,11,41,17],[12,15,42,25],[12,6,2,12],[11,3,11,12]];
+
+var start;
+var progressbarinner;
+var image_loaded;
+
+var mode, questionnum;
+
+
+function createProgressbar(id, duration, callback) {
+  // We select the div that we want to turn into a progressbar
+  var progressbar = document.getElementById(id);
+  progressbar.className = 'progressbar';
+
+  // We create the div that changes width to show progress
+  progressbarinner = document.createElement('div');
+  progressbarinner.className = 'inner';
+
+  // Now we set the animation parameters
+  progressbarinner.style.animationDuration = duration;
+
+  // Eventually couple a callback
+  if (typeof(callback) === 'function') {
+    progressbarinner.addEventListener('animationend', callback);
+  }
+
+  // Append the progressbar to the main progressbardiv
+  progressbar.appendChild(progressbarinner);
+
+  // When everything is set up we start the animation
+  progressbarinner.style.animationPlayState = 'running';
+}
+
+
+function init(){
+	start = new Date().getTime();
+
+	image_loaded = [];
+	
+	
+	
+	var myurl = window.location.href;
+	mode = myurl.substring(myurl.indexOf('=')+1,myurl.indexOf('=')+3)
+	questionnum = myurl.substring(myurl.indexOf('question=')+9);
+	
+	var intmode;
+	if (mode == "mx") intmode = 3;
+	else if (mode == "gt") intmode = 1;
+	
+	
+	var my_image = document.getElementById("0");
+	my_image.src = "images/matching/"+String(demo[parseInt(questionnum)-1][0])+"."+String(intmode)+".png";
+	var nl_image;
+	for (var ii=1; ii<=3;ii++){
+		nl_image = document.getElementById(String(ii));
+		nl_image.src = "images/matching/"+String(demo[parseInt(questionnum)-1][ii])+".2.png";
+	}
+	
+	
+
+
+}
+
+function showmsg(){
+	document.getElementById("msg").innerHTML = "Time Out: For the real questions, you will automatically be directed to the answer page";
+}
+
+function move_on(){
+	if (image_loaded.length == 4){
+		var end = new Date().getTime();
+		var thetime = end - start;
+		window.location.replace('tamatching.html?type='+mode+'&question='+String(questionnum)+'&duration='+String(thetime));
+	}
+}
+
+function xload(elem){
+  if (image_loaded.indexOf(parseInt(elem.id)) == -1 )
+	image_loaded.push(parseInt(elem.id));
+  if (image_loaded.length == 4){
+	document.getElementById("imagewrapper").style.display = "block";
+	createProgressbar('progressbar1', '40s', showmsg);
+	document.body.onkeyup = function(e){
+		if(e.keyCode == 32){
+			move_on();
+		}
+	}
+  }
+}
+
+
+window.onload=init;
+</script>
+
+</head>
+<body>
+	
+	<div id='progressbar1'></div>
+	<br />
+	<br />
+	<br />
+	<div class="main_div" align=center height="800px">
+		
+		<div id='imagewrapper' style="height:150px; display:none">
+			<div id='myimages'>
+				<div id="top">
+					<img class="survey_img" id="0"  onload="xload(this)"/>
+				</div>
+				<div id="bottom">
+					<img class="survey_img" id="1" onload="xload(this)"/>
+					<img class="survey_img" id="2" onload="xload(this)"/>
+					<img class="survey_img" id="3" onload="xload(this)"/>
+				</div>
+				<div id="bottomlabels">
+					<p style="word-spacing:160px; font-weight:bold">A B C</p>
+
+
+					<!--
+					<img class="survey_img" src="images/A.png"/>
+					<img class="survey_img" src="images/B.png"/>
+					<img class="survey_img" src="images/A.png"/>
+					-->
+				</div>
+				<div style="margin-top:50px">
+					<p id="msg" style="font-weight:bold; color:red"></p>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+	</div>
+
+</body>
+</html>

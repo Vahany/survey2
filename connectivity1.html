@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+
+<script>
+var start;
+var progressbarinner;
+var image_loaded = false;
+
+var mode, questionnum, graph;
+
+//change this through the connectivity 1,2,3
+var idx = 0;
+
+function randInt(min, max) { //inclusive
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function createProgressbar(id, duration, callback) {
+  // We select the div that we want to turn into a progressbar
+  var progressbar = document.getElementById(id);
+  progressbar.className = 'progressbar';
+
+  // We create the div that changes width to show progress
+  progressbarinner = document.createElement('div');
+  progressbarinner.className = 'inner';
+
+  // Now we set the animation parameters
+  progressbarinner.style.animationDuration = duration;
+
+  // Eventually couple a callback
+  if (typeof(callback) === 'function') {
+    progressbarinner.addEventListener('animationend', callback);
+  }
+
+  // Append the progressbar to the main progressbardiv
+  progressbar.appendChild(progressbarinner);
+
+  // When everything is set up we start the animation
+  progressbarinner.style.animationPlayState = 'running';
+}
+
+
+function init(){
+	start = new Date().getTime();
+	d3.json("data/users.json",function(users){
+		var myurl = window.location.href;
+		questionnum = myurl.substring(myurl.indexOf('question=')+9);
+		
+		//connectivity[0] because 1-connected
+		mode = users.connectivity[idx].currentmode;
+		if (mode == "nl") intmode = 0;
+		else if (mode == "gt") intmode = 1;
+		else if (mode == "mx") intmode = 2;
+		graph = users.connectivity[idx].currentgraph[intmode];
+		console.log('graph:'+graph);
+		console.log('mode:'+mode);
+		document.body.onkeyup = function(e){
+			if(e.keyCode == 32){
+				move_on();
+			}
+		}
+		
+		image_loaded = false;
+		var my_image = document.getElementById("0");
+		
+		var intmode;
+		if (mode == "nl") intmode = 2;
+		else if (mode == "gt") intmode = 1;
+		else if (mode == "mx") intmode = 3;
+		my_image.src = "images/connectivity/"+String(graph)+"."+String(intmode)+".png";
+		
+		my_image.onload = function () {
+			image_loaded = true;       
+			createProgressbar('progressbar1', '10s', move_on);
+		};
+	
+	});
+
+}
+
+function move_on(){
+	if (image_loaded){
+		var end = new Date().getTime();
+		var thetime = end - start;
+		window.location.replace('aconnectivity'+String(idx+1)+'.html?duration='+String(thetime)+'&question='+String(questionnum));
+	}
+}
+
+
+window.onload=init;
+</script>
+
+</head>
+<body>
+	
+	<div id='progressbar1'></div>
+	<br />
+	<br />
+	<br />
+	<div class="main_div" align=center height="800px">
+		
+		<div id='imagewrapper' style="height:150px; display:block">
+			<img class="survey_img" id="0"/>
+		</div>
+		
+		
+	</div>
+
+</body>
+</html>

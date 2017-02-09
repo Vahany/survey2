@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+var questions = [[1,1,2,10],[2,13,3,9],[3,16,7,37],[4,4,5,12],[5,22,8,40],[6,6,38,11],[7,28,31,34],[8,32,23,19],[9,35,29,39],[10,10,14,30]];
+
+var answers = [1,13,16,4,22,6,28,32,35,10];
+
+var duration;
+var progressbarinner;
+
+var mode, questionnum, order, thequestion;
+
+var picked;
+
+var isnextclicked;
+
+
+function createProgressbar(id, duration, callback) {
+  // We select the div that we want to turn into a progressbar
+  var progressbar = document.getElementById(id);
+  progressbar.className = 'progressbar';
+  // We create the div that changes width to show progress
+  progressbarinner = document.createElement('div');
+  progressbarinner.className = 'inner';
+  // Now we set the animation parameters
+  progressbarinner.style.animationDuration = duration;
+  // Eventually couple a callback
+  if (typeof(callback) === 'function') {
+    progressbarinner.addEventListener('animationend', callback);
+  }
+  // Append the progressbar to the main progressbardiv
+  progressbar.appendChild(progressbarinner);
+  // When everything is set up we start the animation
+  progressbarinner.style.animationPlayState = 'running';
+}
+
+
+function init(){
+	isnextclicked = false;
+	var myurl = window.location.href;
+	mode = myurl.substring(myurl.indexOf('type=')+5,myurl.indexOf('type=')+7)
+	questionnum = myurl.substring(myurl.indexOf('question=')+9,myurl.indexOf('&duration'))
+	duration = myurl.substring(myurl.indexOf('duration=')+9)
+	//alert(mode);
+	document.getElementById('next').disabled = true;
+	//on clicking next save duration and value if value is wrong show them an alert
+	document.getElementById('next').onclick=function(){
+		isnextclicked = true;
+		document.getElementById('next').disabled = true;
+		//first save
+		save();
+	};
+	
+	var myradios = document.getElementsByClassName("myradio");
+	for (var i =0; i<myradios.length; i++){
+		myradios[i].onclick = function(){
+			if (!isnextclicked){
+				document.getElementById('next').disabled = false;
+				this.style.border = "5px solid blue";
+				this.style.color = "blue";
+				picked = this.id;
+				for (var j=0;j<myradios.length; j++){	
+					if (myradios[j]!=this){
+						myradios[j].style.border = "1px solid black";
+						myradios[j].style.color = "black";
+					}
+				}
+			}
+		}
+	}
+
+}
+
+function move_on(){
+	setTimeout(function(){
+		if (parseInt(questionnum) < 20) {
+			window.location.replace('matching.html?question='+String(parseInt(questionnum)+1));
+		}
+		else window.location.replace('denseintro.html');
+	},1000);
+}
+
+function save(){
+	d3.json("data/users.json",function(users){
+		userid = users.usercount;
+
+		mode = users.matching.currentmode;
+		order = users.matching.currentorder;
+		thequestion = users.matching.currentidx;
+		
+		var intmode, midx;
+		if (mode == "mx") {intmode = 3; midx = 0;}
+		else if (mode == "gt") {intmode = 1; midx = 1;}
+		
+		var mygraphs = [];
+		mygraphs.push(questions[parseInt(thequestion[midx])][0]);
+		mygraphs.push(questions[parseInt(thequestion[midx])][order[0]]);
+		mygraphs.push(questions[parseInt(thequestion[midx])][order[1]]);
+		mygraphs.push(questions[parseInt(thequestion[midx])][order[2]]);
+		
+		var correctanswer = answers[parseInt(thequestion[midx])];
+		
+		var iscorrect = (((correctanswer == mygraphs[1]) && (picked == "A")) || ((correctanswer == mygraphs[2]) && (picked == "B")) || ((correctanswer == mygraphs[3]) && (picked == "C")));
+		
+		
+		var savejson = {"filename":"matching","userid":userid,"visrep":mode,"refgraph":mygraphs[0],"graph1":mygraphs[1],"graph2":mygraphs[2],"graph3":mygraphs[3],"correctanswer":correctanswer,"correct":iscorrect,"answers":picked,"question":questionnum, "duration":duration};
+		
+		$.ajax({
+			type: 'POST',
+			url: 'cgi-bin/savetofile.py',//url of receiver file on server
+			dataType: "json",
+			data: JSON.stringify(savejson), //your data
+			success: function (response) {
+				//update users file
+				if (parseInt(questionnum) == 20) {
+					var oldmode, newmode;
+					oldmode = users.matching.usermode;
+					if (oldmode=="gt") newmode = "mx";
+					else if (oldmode=="mx") newmode = "gt";
+					users.matching.usermode = newmode;
+					users.matching.currentmode = users.matching.usermode;
+					
+					for (var imode =0; imode< 2; imode++){
+						if (users.matching.useridx[imode] <9) users.matching.useridx[imode] = users.matching.useridx[imode]+1;
+						else users.matching.useridx[imode] = 0;
+						users.matching.currentidx[imode] = users.matching.useridx[imode];
+					}
+					
+					for (var imode =0; imode< 3; imode++){
+						if (users.matching.userorder[imode] <3) users.matching.userorder[imode] = users.matching.userorder[imode]+1;
+						else users.matching.userorder[imode] = 1;
+						users.matching.currentorder[imode] = users.matching.userorder[imode];
+					}
+					
+					
+				}
+				else{
+					var newmode;
+					if (mode=="gt") newmode = "mx";
+					else if (mode=="mx") newmode = "gt";
+					users.matching.currentmode = newmode;
+					
+					if (users.matching.currentidx[midx] <9) users.matching.currentidx[midx] = users.matching.currentidx[midx]+1;
+					else users.matching.currentidx[midx] = 0;
+					
+					for (var imode =0; imode< 3; imode++){
+						if (users.matching.currentorder[imode] <3) users.matching.currentorder[imode] = users.matching.currentorder[imode]+1;
+						else users.matching.currentorder[imode] = 1;
+					}
+				}
+				
+				
+				
+				$.ajax({
+					type: 'POST',
+					url: "cgi-bin/updateusers.py", // this is just a url that is responsible to return files list 
+					data: JSON.stringify(users),
+					dataType: "json",
+					success: function (response) {
+						move_on();
+					},
+					error: function (myerror) {
+						alert(myerror);
+					}
+				});
+			}
+		});
+		
+	});
+
+}
+
+window.onload=init;
+</script>
+
+</head>
+<body>
+
+
+	<div class="main_div" align=center height="800px">
+		<br /><br />
+		<div align=center id="answers">
+			
+			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
+			<div class="myradio" id="A">A</div><div class="myradio" id="B">B</div><div class="myradio" id="C">C</div><div class="myradio" id="unsure">unsure</div>
+		</div>
+		<br /><br />
+		<div align=center id="buttonnext" style="clear:left">
+			<button type="button" id="next">Next</button>
+		</div>
+		
+		
+	</div>
+
+</body>
+</html>

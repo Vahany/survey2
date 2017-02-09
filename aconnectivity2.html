@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+
+var progressbarinner;
+var image_loaded = false;
+
+var mode, duration, questionnum;
+var picked;
+
+//change this through the connectivity 1,2,3
+var idx = 1;
+
+var isnextclicked;
+
+function createProgressbar(id, duration, callback) {
+  // We select the div that we want to turn into a progressbar
+  var progressbar = document.getElementById(id);
+  progressbar.className = 'progressbar';
+
+  // We create the div that changes width to show progress
+  progressbarinner = document.createElement('div');
+  progressbarinner.className = 'inner';
+
+  // Now we set the animation parameters
+  progressbarinner.style.animationDuration = duration;
+
+  // Eventually couple a callback
+  if (typeof(callback) === 'function') {
+    progressbarinner.addEventListener('animationend', callback);
+  }
+
+  // Append the progressbar to the main progressbardiv
+  progressbar.appendChild(progressbarinner);
+
+  // When everything is set up we start the animation
+  progressbarinner.style.animationPlayState = 'running';
+}
+
+
+function init(){
+	isnextclicked = false;
+	var myurl = window.location.href;
+	//mode = myurl.substring(myurl.indexOf('type=')+5,myurl.indexOf('type=')+7);
+	questionnum = myurl.substring(myurl.indexOf('question=')+9);
+	duration = myurl.substring(myurl.indexOf('duration=')+9,myurl.indexOf('&'));
+	//alert(mode);
+	document.getElementById('next').disabled = true;
+	//on clicking next save duration and value if value is wrong show them an alert
+	document.getElementById('next').onclick=function(){
+		isnextclicked = true;
+		document.getElementById('next').disabled = true;
+		//first save
+		save();
+	};
+	
+	var myradios = document.getElementsByClassName("myradio");
+	for (var i =0; i<myradios.length; i++){
+		myradios[i].onclick = function(){
+			if (!isnextclicked){
+				document.getElementById('next').disabled = false;
+				this.style.border = "5px solid blue";
+				this.style.color = "blue";
+				picked = this.id;
+				for (var j=0;j<myradios.length; j++){	
+					if (myradios[j]!=this){
+						myradios[j].style.border = "1px solid black";
+						myradios[j].style.color = "black";
+					}
+				}
+			}
+			//alert(this.innerHTML);
+		}
+	}
+
+}
+
+function move_on(){
+	setTimeout(function(){
+		if (parseInt(questionnum) < 27) {
+			window.location.replace('connectivity'+String(idx+1)+'.html?question='+String(parseInt(questionnum)+1));
+		}
+		else window.location.replace('connectivityintro'+String(idx+2)+'.html');
+	},1000);
+}
+
+function save(){
+	d3.json("data/users.json",function(users){
+		userid = users.usercount;
+		
+		//connectivity[0] because 1-connected
+		mode = users.connectivity[idx].currentmode;
+		var intmode;
+		if (mode == "nl") intmode = 0;
+		else if (mode == "gt") intmode = 1;
+		else if (mode == "mx") intmode = 2;
+		graph = users.connectivity[idx].currentgraph[intmode];
+		
+		console.log(userid);
+		
+		var savejson = {"filename":("connectivity"+String(idx+1)),"userid":userid,"visrep":mode,"graph":graph,"question":questionnum,"answers":picked, "duration":duration};
+		$.ajax({
+			type: 'POST',
+			url: 'cgi-bin/savetofile.py',//url of receiver file on server
+			dataType: "json",
+			data: JSON.stringify(savejson), //your data
+			success: function (response) {
+				//update users file
+				var newmode;
+				if (mode == "nl") newmode = "gt";
+				else if (mode=="gt") newmode = "mx";
+				else if (mode=="mx") newmode = "nl";
+				users.connectivity[idx].currentmode = newmode;
+				if (users.connectivity[idx].currentgraph[intmode] <9) users.connectivity[idx].currentgraph[intmode] = users.connectivity[idx].currentgraph[intmode]+1;
+				else users.connectivity[idx].currentgraph[intmode] = 1;
+				
+				if (parseInt(questionnum) == 27) {
+					var oldmode, newmode;
+					oldmode = users.connectivity[idx].usermode;
+					if (oldmode == "nl") newmode = "gt";
+					else if (oldmode=="gt") newmode = "mx";
+					else if (oldmode=="mx") newmode = "nl";
+					users.connectivity[idx].usermode = newmode;
+					users.connectivity[idx].currentmode = users.connectivity[idx].usermode;
+					
+					for (var imode =0; imode< 3; imode++){
+						if (users.connectivity[idx].usergraph[imode] <9) users.connectivity[idx].usergraph[imode] = users.connectivity[idx].usergraph[imode]+1;
+						else users.connectivity[idx].usergraph[imode] = 1;
+						users.connectivity[idx].currentgraph[imode] = users.connectivity[idx].usergraph[imode];
+					}
+				}
+				
+				
+				$.ajax({
+					type: 'POST',
+					url: "cgi-bin/updateusers.py", // this is just a url that is responsible to return files list 
+					data: JSON.stringify(users),
+					dataType: "json",
+					success: function (response) {
+						move_on();
+					},
+					error: function (myerror) {
+						alert(myerror);
+					}
+				});
+			}
+		});
+		
+	});
+}
+
+window.onload=init;
+</script>
+
+</head>
+<body>
+
+
+	<div class="main_div" align=center height="800px">
+		<br /><br />
+		<div align=center id="answers">
+			
+			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
+			<div class="myradio" id="0">0</div><div class="myradio" id="1">1</div><div class="myradio" id="2">2</div><div  id="3" class="myradio">3</div><div class="myradio" id="4">4</div><div class="myradio" id="5">5</div><div class="myradio" id="6">6</div><div class="myradio" id="unsure">unsure</div>
+		</div>
+		<br /><br />
+		<div align=center id="buttonnext" style="clear:left">
+			<button type="button" id="next">Next</button>
+		</div>
+		
+		
+	</div>
+
+</body>
+</html>

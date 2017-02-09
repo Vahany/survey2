@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script>
+var userid;
+var start;
+
+function init(){
+	start = new Date().getTime();
+	
+	$.ajax({
+		type: 'POST',
+		url: "cgi-bin/updateuserid.py", // this is just a url that is responsible to return files list 
+		data: "{}",
+		dataType: "json",
+		success: function (response) {
+			userid = response.user;
+			if (userid == 0) alert("folder exists");
+			console.log(userid);
+		},
+		error: function (myerror) {
+			alert(myerror);
+		}
+
+	});
+
+    document.getElementById('next').onclick=function(){
+		var end = new Date().getTime();
+		var duration = end - start;
+		
+		var radios = document.getElementsByName('mygroup1');
+		var myresult1 = "";
+		for (var i = 0, length = radios.length; i < length; i++) {
+			if (radios[i].checked) {
+				myresult1 = radios[i].value;
+				break;
+			}
+		}
+		
+		radios = document.getElementsByName('mygroup2');
+		var myresult2 = "";
+		for (var i = 0, length = radios.length; i < length; i++) {
+			if (radios[i].checked) {
+				myresult2 = radios[i].value;
+				break;
+			}
+		}
+		
+		radios = document.getElementsByName('mygroup3');
+		var myresult3 = "";
+		for (var i = 0, length = radios.length; i < length; i++) {
+			if (radios[i].checked) {
+				myresult3 = radios[i].value;
+				break;
+			}
+		}
+		var answers = [myresult1, myresult2, myresult3];
+
+		var backgroundjson = {"filename":"background","userid":userid,"answers":answers, "duration":duration};
+		$.ajax({
+			type: 'POST',
+			url: 'cgi-bin/savetofile.py',//url of receiver file on server
+			dataType: "json",
+			data: JSON.stringify(backgroundjson), //your data
+			success: function (response) {
+				window.location.replace('tute1.html');
+			}
+		});
+	}
+}
+	
+window.onload=init;
+</script>
+
+</head>
+<body>
+	<div class="main_div">
+	<p>Here is an example of a network diagram</p>
+	<a href="http://marvl.infotech.monash.edu/webcola/examples/unconstrainedsmallworld.html">
+	<img id="networkexample" src="images/lesmis_webcola.png" alt="http://marvl.infotech.monash.edu/webcola/examples/unconstrainedsmallworld.html" />
+	</a>
+	
+	<br />
+	<br />
+	
+	<h3>Which describes your situation best?</h3>
+	<input type="radio" name="mygroup1" id="never" value="never" checked />
+	<label for="never">I have never seen network diagrams</label> 
+	<br />
+	<br />
+	<input type="radio" name="mygroup1" id="moderate" value="seldom" />
+	<label for="moderate">I occasionally see network diagrams</label> 
+	<br />
+	<br />
+	<input type="radio" name="mygroup1" id="expert" value="often" />
+	<label for="expert">I often see network diagrams</label>
+	
+	<br />
+	<br />
+
+	
+	<h3>Are you familiar with these terms-"clusters" and "connected components", in relation to network diagrams?</h3>
+	<input type="radio" name="mygroup2" id="no" value="no" checked />
+	<label for="no">No</label> 
+	<br />
+	<br />
+	<input type="radio" name="mygroup2" id="yes" value="yes" />
+	<label for="yes">Yes</label> 
+	
+	<br />
+	<br />
+	
+	<h3>Are you visually impaired?</h3>
+	<input type="radio" name="mygroup3" id="vno" value="no" checked />
+	<label for="vno">No</label> 
+	<br />
+	<br />
+	<input type="radio" name="mygroup3" id="vyes" value="yes" />
+	<label for="vyes">Yes</label> 
+	</div>
+	<br />
+	<br />
+	
+
+	<div align=center>
+	<button type="button" id="next">Next</button>
+	</div>
+</body>
+</html>
