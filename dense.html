@@ -45,25 +45,35 @@ d3.json("data/users.json",function(users){
 	image_loaded = [];
 	var myurl = window.location.href;
 	questionnum = myurl.substring(myurl.indexOf('question=')+9);
+	var refreshneeded = false;
+	if (questionnum != "1"){
+		mode = myurl.substring(myurl.indexOf('=')+1,myurl.indexOf('=')+3);
+		refreshneeded = (mode != users.dense.currentmode);
+	}
+	if (refreshneeded){
+		alert('refresh issue');
+		window.location.replace(myurl);
+	}
+	else{
+		mode = users.dense.currentmode;
+		order = users.dense.currentorder;
+		thequestion = users.dense.currentidx;
 
-	mode = users.dense.currentmode;
-	order = users.dense.currentorder;
-	thequestion = users.dense.currentidx;
+		var intmode, midx;
+		if (mode == "nl") {intmode = 2; midx = 0;}
+		else if (mode == "gt") {intmode = 1; midx = 1;}
+		else if (mode == "mx") {intmode = 3; midx = 2;}
+		
+		var mygraphs = [];
 
-	var intmode, midx;
-	if (mode == "nl") {intmode = 2; midx = 0;}
-	else if (mode == "gt") {intmode = 1; midx = 1;}
-	else if (mode == "mx") {intmode = 3; midx = 2;}
-	
-	var mygraphs = [];
-
-	mygraphs.push(questions[parseInt(thequestion[midx])][order[0]]);
-	mygraphs.push(questions[parseInt(thequestion[midx])][order[1]]);
-	
-	var nl_image;
-	for (var ii=0; ii<=1;ii++){
-		nl_image = document.getElementById(String(ii));
-		nl_image.src = "images/matching/"+String(mygraphs[ii])+"."+String(intmode)+".png";
+		mygraphs.push(questions[parseInt(thequestion[midx])][order[0]]);
+		mygraphs.push(questions[parseInt(thequestion[midx])][order[1]]);
+		
+		var nl_image;
+		for (var ii=0; ii<=1;ii++){
+			nl_image = document.getElementById(String(ii));
+			nl_image.src = "images/matching/"+String(mygraphs[ii])+"."+String(intmode)+".png";
+		}
 	}
 });
 

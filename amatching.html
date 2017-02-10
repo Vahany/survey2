@@ -77,10 +77,10 @@ function init(){
 
 }
 
-function move_on(){
+function move_on(themode){
 	setTimeout(function(){
 		if (parseInt(questionnum) < 20) {
-			window.location.replace('matching.html?question='+String(parseInt(questionnum)+1));
+			window.location.replace('matching.html?mode='+String(themode)+'&question='+String(parseInt(questionnum)+1));
 		}
 		else window.location.replace('denseintro.html');
 	},1000);
@@ -163,7 +163,8 @@ function save(){
 					data: JSON.stringify(users),
 					dataType: "json",
 					success: function (response) {
-						move_on();
+						var themode = users.matching.currentmode;
+						move_on(themode);
 					},
 					error: function (myerror) {
 						alert(myerror);

@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://www.w3schools.com/lib/w3data.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+
+<script>
+d3.json('data/users.json',function(users){
+	document.getElementById('next').onclick=function(){
+		var email = document.getElementById("email").value;
+		var backgroundjson = {"filename":"email","answers":email,"userid":users.usercount};
+		$.ajax({
+			type: 'POST',
+			url: 'cgi-bin/savetofile.py',//url of receiver file on server
+			dataType: "json",
+			data: JSON.stringify(backgroundjson), //your data
+			success: function (response) {
+				window.location.replace('http://www.vahany.com');
+			},
+			error: function (myerror) {
+				alert('please notify your agent');
+				window.location.replace('http://www.vahany.com');
+			}
+		});
+	};
+});
+</script>
+
+</head>
+<body>
+	<div w3-include-html="headertemplate.html"></div> 
+	
+	<div class="main_div">
+	<h3>Thank you for participating in this survey</h3>
+	
+	<p>Please enter your email, if you wish to enter the draw for a chance to win a A$50 gift card. </p>
+	
+	<input type="text" name="email" id="email" style="width:400px">
+	<br /><br /><br />
+	<br />
+	<div align=center>
+	<button type="button" id="next">Submit</button>
+	</div>
+	</div>
+    <div w3-include-html="footertemplate.html"></div> 
+	<script>
+		w3IncludeHTML();
+	</script>
+</body>
+</html>

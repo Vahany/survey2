@@ -48,34 +48,50 @@ function createProgressbar(id, duration, callback) {
 d3.json("data/users.json",function(users){
 	var myurl = window.location.href;
 	questionnum = myurl.substring(myurl.indexOf('question=')+9);
+	var refreshneeded = false;
+	if (questionnum != "1"){
+
+		mode = myurl.substring(myurl.indexOf('=')+1,myurl.indexOf('=')+3);
+		graph = myurl.substring(myurl.indexOf('graph=')+6,myurl.indexOf('&question'));
 	
-	//connectivity[0] because 1-connected
-	mode = users.connectivity[idx].currentmode;
-	if (mode == "nl") intmode = 0;
-	else if (mode == "gt") intmode = 1;
-	else if (mode == "mx") intmode = 2;
-	graph = users.connectivity[idx].currentgraph[intmode];
-	
-	document.body.onkeyup = function(e){
-		if(e.keyCode == 32){
-			move_on();
-		}
+		if (mode == "nl") intmode = 0;
+		else if (mode == "gt") intmode = 1;
+		else if (mode == "mx") intmode = 2;
+		refreshneeded = ((mode != users.connectivity[idx].currentmode) || (graph != users.connectivity[idx].currentgraph[intmode]));
 	}
-	
-	image_loaded = false;
-	var my_image = document.getElementById("0");
-	
-	var intmode;
-	if (mode == "nl") intmode = 2;
-	else if (mode == "gt") intmode = 1;
-	else if (mode == "mx") intmode = 3;
-	my_image.src = "images/connectivity/"+String(graph)+"."+String(intmode)+".png";
-	
-	my_image.onload = function () {
-		image_loaded = true;       
-		start = new Date().getTime();
-		createProgressbar('progressbar1', '10s', move_on);
-	};
+	if (refreshneeded){
+		alert('refresh issue');
+		window.location.replace(myurl);
+	}
+	else{
+		//connectivity[0] because 1-connected
+		mode = users.connectivity[idx].currentmode;
+		if (mode == "nl") intmode = 0;
+		else if (mode == "gt") intmode = 1;
+		else if (mode == "mx") intmode = 2;
+		graph = users.connectivity[idx].currentgraph[intmode];
+		
+		document.body.onkeyup = function(e){
+			if(e.keyCode == 32){
+				move_on();
+			}
+		}
+		
+		image_loaded = false;
+		var my_image = document.getElementById("0");
+		
+		var intmode;
+		if (mode == "nl") intmode = 2;
+		else if (mode == "gt") intmode = 1;
+		else if (mode == "mx") intmode = 3;
+		my_image.src = "images/connectivity/"+String(graph)+"."+String(intmode)+".png";
+		
+		my_image.onload = function () {
+			image_loaded = true;       
+			start = new Date().getTime();
+			createProgressbar('progressbar1', '10s', move_on);
+		};
+	}
 
 });
 

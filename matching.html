@@ -51,27 +51,37 @@ d3.json("data/users.json",function(users){
 	image_loaded = [];
 	var myurl = window.location.href;
 	questionnum = myurl.substring(myurl.indexOf('question=')+9);
+	var refreshneeded = false;
+	if (questionnum != "1"){
+		mode = myurl.substring(myurl.indexOf('=')+1,myurl.indexOf('=')+3);
+		refreshneeded = (mode != users.matching.currentmode);
+	}
+	if (refreshneeded){
+		alert('refresh issue');
+		window.location.replace(myurl);
+	}
+	else{
+		mode = users.matching.currentmode;
+		order = users.matching.currentorder;
+		thequestion = users.matching.currentidx;
 
-	mode = users.matching.currentmode;
-	order = users.matching.currentorder;
-	thequestion = users.matching.currentidx;
-
-	var intmode, midx;
-	if (mode == "mx") {intmode = 3; midx = 0;}
-	else if (mode == "gt") {intmode = 1; midx = 1;}
-	
-	var mygraphs = [];
-	mygraphs.push(questions[parseInt(thequestion[midx])][0]);
-	mygraphs.push(questions[parseInt(thequestion[midx])][order[0]]);
-	mygraphs.push(questions[parseInt(thequestion[midx])][order[1]]);
-	mygraphs.push(questions[parseInt(thequestion[midx])][order[2]]);
-	
-	var my_image = document.getElementById("0");
-	my_image.src = "images/matching/"+String(mygraphs[0])+"."+String(intmode)+".png";
-	var nl_image;
-	for (var ii=1; ii<=3;ii++){
-		nl_image = document.getElementById(String(ii));
-		nl_image.src = "images/matching/"+String(mygraphs[ii])+".2.png";
+		var intmode, midx;
+		if (mode == "mx") {intmode = 3; midx = 0;}
+		else if (mode == "gt") {intmode = 1; midx = 1;}
+		
+		var mygraphs = [];
+		mygraphs.push(questions[parseInt(thequestion[midx])][0]);
+		mygraphs.push(questions[parseInt(thequestion[midx])][order[0]]);
+		mygraphs.push(questions[parseInt(thequestion[midx])][order[1]]);
+		mygraphs.push(questions[parseInt(thequestion[midx])][order[2]]);
+		
+		var my_image = document.getElementById("0");
+		my_image.src = "images/matching/"+String(mygraphs[0])+"."+String(intmode)+".png";
+		var nl_image;
+		for (var ii=1; ii<=3;ii++){
+			nl_image = document.getElementById(String(ii));
+			nl_image.src = "images/matching/"+String(mygraphs[ii])+".2.png";
+		}
 	}
 });
 

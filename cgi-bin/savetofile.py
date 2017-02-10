@@ -44,15 +44,15 @@ elif (filename.find('connectivity') != -1):
         file = open('users//'+str(userid)+'//connectivity.json','r')
         existing = json.load(file)
         if filename in existing:
-            existing[filename].append({'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph':input['graph']})
+            existing[filename].append({'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'iscorrect':input['correct'],'graph':input['graph']})
         else:
-            existing[filename] = [{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph':input['graph']}]
+            existing[filename] = [{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'iscorrect':input['correct'],'graph':input['graph']}]
         file.close()
         file = open('users//'+str(userid)+'//connectivity.json','w')
         file.write(json.dumps(existing))
     else:
         file = open('users//'+str(userid)+'//connectivity.json','w')
-        file.write(json.dumps({filename:[{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph':input['graph']}]}))
+        file.write(json.dumps({filename:[{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'iscorrect':input['correct'],'graph':input['graph']}]}))
 elif (filename.find('matching') != -1):
     if (filename.find('tmatching') != -1):
         jsonname = 'users//'+str(userid)+'//training.json'
@@ -93,9 +93,17 @@ elif (filename.find('background') != -1):
     logfile.write('background\n')
     file = open('users//'+str(userid)+'//'+filename+'.json','w')
     file.write(json.dumps({'answers':answers, 'duration':input['duration']}))
+elif (filename.find('email') != -1):
+    logfile.write('email\n')
+    file = open('users//'+str(userid)+'//background.json','r')
+    existing = json.load(file)
+    existing[filename] = input['answers']
+    file = open('users//'+str(userid)+'//background.json','w')
+    file.write(json.dumps(existing))
 
 file.close()
 logfile.close()
 
-sys.stdout.write("Content-Type: application/json")
+print("Content-Type: application/json")
+print(json.dumps({"status":"done"})
 
