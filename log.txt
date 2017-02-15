@@ -1,1 +1,1 @@
-{"correct": true, "answers": "1", "userid": 7, "duration": "1151", "visrep": "cn", "filename": "connectivity1", "graph": 1, "question": "7"}
+{"duration": 10447, "userid": 7, "answers": [], "slidenum": "16", "filename": "tute"}{"duration": 3270, "number": "1"}
