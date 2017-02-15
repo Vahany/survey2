@@ -63,7 +63,7 @@ function init(){
 	if (mode == "nl") intmode = 2;
 	else if (mode == "gt") intmode = 1;
 	else if (mode == "mx") intmode = 3;
-	my_image.src = "images/connectivity/"+String(demo)+"."+String(intmode)+".png";
+	my_image.src = "images/connectivity_noR_600/"+String(demo)+"."+String(intmode)+".png";
 	
 	my_image.onload = function () {
         image_loaded = true;       
@@ -93,20 +93,19 @@ window.onload=init;
 <body>
 	
 	<div id='progressbar1'></div>
-	<div style="height:20px;" align=center>
-		<p id="msg" style="font-weight:bold; color:red"></p>
+	<div style="height:50px;" align=center>
+		<p id="msg" style="font-weight:bold; color:red">&nbsp;</p>
 	<div>
-	<br />
-	<br />
-	<div class="main_div" align=center height="800px">
+	<br /><br /><br /><br />
+	<div class="main_div" align=center>
 		
-		<div id='imagewrapper' style="height:300px; display:block">
+		<div id='imagewrapper' style="display:block">
 			<img class="survey_img" id="0"/>
 		</div>
 		
 		
 		
-		<div style="background-color:red; height:50px; width:800px; margin-top:200px">
+		<div style="background-color:red; height:50px; line-height: 50px; text-align: center; width:800px; margin-top:150px">
 			<p style="font-weight:bold; color:white">TRAINING : PRESS SPACE WHEN READY</p>
 		</div>
 		

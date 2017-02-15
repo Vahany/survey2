@@ -39,6 +39,8 @@ var margin ={"x":"30","y":"30"};
 var x = d3.scale.ordinal().rangeBands([0, size.width-parseInt(margin.x)]);
 //var c = d3.scale.category10().domain(d3.range(10));
 //var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#feb24c'; else return '#fd8d3c';};
+//var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#fd8d3c'; else return '#e31a1c';};
+//last one is red
 var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#fd8d3c'; else return '#e31a1c';};
 var z = d3.scale.linear().domain([0, 1]).clamp(true);
 
@@ -265,11 +267,13 @@ window.onload=init;
 </head>
 <body>
 	<div class="main_div" align=center>
+		<div style="height:500px">
 		<p id="tutorialtext">This is yet another representation of the same network.<br />It is called an adjacency matrix.</p>
 		
 		<div id="chart" style=" font-family:Sans-Serif">
 			
 			
+		</div>
 		</div>
 
 		<br />

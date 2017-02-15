@@ -71,7 +71,7 @@ function init(){
 			var my_image = document.getElementById("0");
 			
 			var idxmode = getidxmode(mode);
-			my_image.src = "images/connectivity/"+String(graph)+"."+String(idxmode)+".png";
+			my_image.src = "images/connectivity_noR_600/"+String(graph)+"."+String(idxmode)+".png";
 			
 			my_image.onload = function () {
 				image_loaded = true;    
@@ -88,7 +88,7 @@ function init(){
 		if (image_loaded){
 			var end = new Date().getTime();
 			var thetime = end - start;
-			window.location.replace('aconnectivity'+String(idx+1)+'.html?duration='+String(thetime)+'&question='+String(questionnum));
+			window.location.replace('aconnectivity'+String(idx+1)+'.html?mode='+String(mode)+'&graph='+String(graph)+'&duration='+String(thetime)+'&question='+String(questionnum));
 		}
 	}
 }
@@ -101,16 +101,14 @@ window.onload=init;
 <body>
 	
 	<div id='progressbar1'></div>
-	<br />
-	<br />
-	<br />
-	<div class="main_div" align=center height="800px">
-		
-		<div id='imagewrapper' style="height:150px; display:block">
+	<div style="height:50px;" align=center>
+		<p>&nbsp;</p>
+	<div>
+	<br /><br /><br /><br />
+	<div class="main_div" align=center>
+		<div id='imagewrapper' style="display:block">
 			<img class="survey_img" id="0"/>
 		</div>
-		
-		
 	</div>
 
 </body>
