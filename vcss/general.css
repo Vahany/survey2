@@ -9,7 +9,6 @@ button:hover{cursor:pointer}
 
 .replays{width:150px;}
 
-
 .warning{color:red;}
 
 .footerContacts{display:inline-block;margin-left:10px;margin-right:10px;}
@@ -19,7 +18,7 @@ label{font-size:28px;}
 .main_div{margin-left:50px; margin-right:50px;}
 .survey_img{width:150;height:150;border:0px solid black; padding:20px}
 
-#tutorialtext{font-size:34px;}
+#tutorialtext{font-size:34px; font-family:sans-serif}
 
 .matrixg rect{fill:white;}
 
@@ -28,17 +27,10 @@ label{font-size:28px;}
 label {cursor:pointer}
 input {cursor: pointer}
 
-.rotate90 {
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(90deg);
-}
-
-.myradio { width:100px; height:100px; line-height: 100px;
-
-  text-align: center; margin: 10px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;}
+.mymradio { width:300px; height:300px; line-height: 300px;text-align: center; margin: 10px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;float:left}
+.myradio { width:100px; height:100px; line-height: 100px;text-align: center; margin: 10px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;float:left}
+ #answers {width:990px;}
+ #manswers {width:980px;}
  
  .progressbar {
   width: 80%;

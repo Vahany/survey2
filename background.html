@@ -41,6 +41,8 @@ function init(){
 			}
 		}
 		
+		
+
 		radios = document.getElementsByName('mygroup2');
 		var myresult2 = "";
 		for (var i = 0, length = radios.length; i < length; i++) {
@@ -50,6 +52,7 @@ function init(){
 			}
 		}
 		
+		/*
 		radios = document.getElementsByName('mygroup3');
 		var myresult3 = "";
 		for (var i = 0, length = radios.length; i < length; i++) {
@@ -57,8 +60,9 @@ function init(){
 				myresult3 = radios[i].value;
 				break;
 			}
-		}
-		var answers = [myresult1, myresult2, myresult3];
+		}*/
+		var answers = [myresult1, myresult2];
+		
 
 		var backgroundjson = {"filename":"background","userid":userid,"answers":answers, "duration":duration};
 		$.ajax({
@@ -67,7 +71,7 @@ function init(){
 			dataType: "json",
 			data: JSON.stringify(backgroundjson), //your data
 			success: function (response) {
-				window.location.replace('tute1.html');
+				window.location.replace('tutes.html?slide=1');
 			}
 		});
 	}
@@ -114,6 +118,7 @@ window.onload=init;
 	<br />
 	<br />
 	
+	<!--
 	<h3>Are you visually impaired?</h3>
 	<input type="radio" name="mygroup3" id="vno" value="no" checked />
 	<label for="vno">No</label> 
@@ -124,7 +129,9 @@ window.onload=init;
 	</div>
 	<br />
 	<br />
-	
+	-->
+	<br />
+	<br />
 
 	<div align=center>
 	<button type="button" id="next">Next</button>

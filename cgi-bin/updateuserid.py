@@ -3,9 +3,7 @@ import json
 import os
 
 logfile = open("log.txt","w")
-logfile.write("meow")
 file = open("data/users.json", "r")
-logfile.write(str(231))
 usersjson = json.load(file)
 file.close()
 thecount = usersjson['usercount']
@@ -25,7 +23,8 @@ if (theerror == 0):
     jsonresponse = {'user':(thecount+1)}
 else:
     jsonresponse = {'user':0}
-
+file.close()
+logfile.close()
 sys.stdout.write("Content-Type: application/json")
 sys.stdout.write("\n\n")
 sys.stdout.write(json.dumps(jsonresponse))

@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="src/tute.js"></script>
+<script>
+var slide_images =['force2','force2-outlined','force1','','1-outlined','3','path1','path2','path3','path4','not2',
+'gt1','gt2','gt3','gt4','gt-nl'];
+
+var slide_texts = ['This is an example of a network diagram.<br />The nodes (circles) represent the objects of the network and the links (lines) represent the relationships between these objects.', 
+	'Connected components of a network are subsets of nodes, where any node in the subset is reachable from every other node within the same subset.<br />The network below has two connected components.',
+	'If we added a link between these two connected components, then we have one connected component, as shown below.',
+	'Similar to connected components, networks can have 2-connected components.<br />2-connected components are the subset of nodes that have at least two paths to every other node within the subset.<br />2-connected components are also 1-connected.',
+	'This network has two 2-connected components, which are highlighted.',
+	'Let\'s consider the 2-connected component on the right.<br />All the nodes in the highlighted subset have at least two paths to every other node within this subset.',
+	'Let\'s consider these two yellow nodes; they are connected by this path.',
+	'They are also connected by this path.',
+	'Similarly, if we consider these two yellow nodes; they are connected by at least two paths.',
+	'Similarly, if we consider these two yellow nodes; they are connected by at least two paths.',
+	'However these two nodes only have one path to each other and are not part of any 2-connected component.',
+	'This two images show different representations of the same network.<br />The one on the left is called a Graph Thumbnail.',
+	'If we break down the Graph Thumbnail into its different components.<br />The yellow (outermost) circle represents all the connected nodes of the network.',
+	'The light orange circles represent the 2-connected components (the subset of nodes that have at least two distinct paths to every other node within the subset). There are two 2-connected components in this network.',
+	'The dark orange circles represent the 3-connected components of a network.<br />(the subset of nodes that have at least three distinct paths to every other node within the subset).',
+	'The size of the circles, except from the outermost one, are related to the number of nodes within that component.<br />The more connected a component is, the darker the colour of the circle is.'
+	
+	
+];
+
+function init(){
+	var start, end;
+	var myurl = window.location.href;
+	var slidenum = myurl.substring(myurl.indexOf('slide=')+6);
+	if (slidenum == "1") document.getElementById('previous').disabled = true;
+	start = new Date().getTime();
+	var myextension = '.png';
+	
+	//if (parseInt(slidenum) == slide_texts.length) document.getElementById('next').innerHTML = "Finish";
+
+	document.getElementById('tutorialtext').innerHTML = slide_texts[parseInt(slidenum)-1];
+	
+	
+
+	if (slide_images[parseInt(slidenum)-1] == 'gt-nl') myextension = '.gif';
+	document.getElementById('myimg').src = 'images/tutorial/'+slide_images[parseInt(slidenum)-1]+myextension;
+	
+	document.getElementById('myimg').style.visibility = ((slide_images[parseInt(slidenum)-1] == '') ? 'hidden' : 'visible');
+
+	
+	document.getElementById('previous').onclick=function(){
+		//save and do stuff then 
+		save(function(){
+			move_on(String(parseInt(slidenum)-1));
+		});
+	};
+
+	document.getElementById('next').onclick=function(){
+		//save and do stuff then 
+		save(function(){
+			move_on(String(parseInt(slidenum)+1));
+		});
+	};
+	
+	
+	function save(callback){
+		d3.json("data/users.json",function(users){
+			userid = users.usercount;
+			end = new Date().getTime();
+			var duration = end - start;
+			
+			//change filename and savetofile
+			var savejson = {"filename":"tute","slidenum":slidenum,"userid":userid,"answers":[], "duration":duration};
+			
+			$.ajax({
+				type: 'POST',
+				url: 'cgi-bin/savetofile.py',//url of receiver file on server
+				dataType: "json",
+				data: JSON.stringify(savejson), //your data
+				success: function (response) {
+					callback();
+				}
+			});
+		});
+	}
+	
+	function move_on(newslide){
+		if (parseInt(newslide) > slide_texts.length) window.location.replace('tutesmx.html?slide=1');
+		else window.location.replace('tutes.html?slide='+newslide);
+	}
+
+	
+
+}
+
+
+
+
+
+window.onload=init;
+
+</script>
+
+</head>
+<body>
+	<div class="main_div" align=center>
+		<div style="height:500px">
+		
+		<p id="tutorialtext">This is an example of a network diagram.<br />The nodes (circles) represent the objects of the network and the links (lines) represent the relationships between these objects.</p>
+		
+		<img id="myimg"/>
+		</div>
+		<br />
+		<br />
+		<div align=center>
+			<button type="button" id="previous">Previous</button>
+			<button type="button" id="next">Next</button>
+		</div>
+	</div>
+</body>
+</html>

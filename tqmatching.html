@@ -9,7 +9,10 @@
 
 <script>
 
-var demo = [[11,11,41,17],[12,15,42,25],[12,6,2,12],[11,3,11,12]];
+//var demo = [[11,11,41,17],[12,15,42,25],[12,6,2,12],[11,3,11,12]];
+
+var demo = [[12,61,121,21],[12,6,2,12]];
+
 
 var start;
 var progressbarinner;
@@ -106,12 +109,12 @@ window.onload=init;
 <body>
 	
 	<div id='progressbar1'></div>
-	<br />
-	<br />
-	<br />
-	<div class="main_div" align=center height="800px">
-		
-		<div id='imagewrapper' style="height:150px; display:none">
+	<div style="height:20px;" align=center>
+		<p id="msg" style="font-weight:bold; color:red"></p>
+	</div>
+
+	<div class="main_div" align=center>
+		<div id='imagewrapper' style="display:none">
 			<div id='myimages'>
 				<div id="top">
 					<img class="survey_img" id="0"  onload="xload(this)"/>
@@ -122,24 +125,25 @@ window.onload=init;
 					<img class="survey_img" id="3" onload="xload(this)"/>
 				</div>
 				<div id="bottomlabels">
-					<p style="word-spacing:160px; font-weight:bold">A B C</p>
-
-
+					<p style="word-spacing:320px; font-weight:bold">A B C</p>
 					<!--
 					<img class="survey_img" src="images/A.png"/>
 					<img class="survey_img" src="images/B.png"/>
 					<img class="survey_img" src="images/A.png"/>
 					-->
 				</div>
-				<div style="margin-top:50px">
-					<p id="msg" style="font-weight:bold; color:red"></p>
-				</div>
+				
+				
+				
 			</div>
 		</div>
 		
-		
+		<div style="background-color:red; height:50px; width:800px;">
+			<p style="font-weight:bold; color:white">TRAINING : PRESS SPACE WHEN READY</p>
+		</div>
 		
 	</div>
+	
 
 </body>
 </html>

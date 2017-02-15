@@ -8,9 +8,9 @@
 
 <script>
 //change this through the connectivity 1,2,3
-var demo = 12;
+var demo = 10;
 //change this through the connectivity 1,2,3
-var thecorrectanswer = 3;
+var thecorrectanswer = 2;
 //change this through the connectivity 1,2,3
 var locationname = '3';
 
@@ -67,14 +67,17 @@ function init(){
 	for (var i =0; i<myradios.length; i++){
 		myradios[i].onclick = function(){
 			if (!isnextclicked){
-				document.getElementById('next').disabled = false;
-				this.style.border = "5px solid blue";
-				this.style.color = "blue";
-				picked = this.id;
-				for (var j=0;j<myradios.length; j++){	
-					if (myradios[j]!=this){
-						myradios[j].style.border = "1px solid black";
-						myradios[j].style.color = "black";
+				if (this.id == "unsure") alert("you can't pick this option for training purposes");
+				else{
+					document.getElementById('next').disabled = false;
+					this.style.border = "5px solid blue";
+					this.style.color = "blue";
+					picked = this.id;
+					for (var j=0;j<myradios.length; j++){	
+						if (myradios[j]!=this){
+							myradios[j].style.border = "1px solid black";
+							myradios[j].style.color = "black";
+						}
 					}
 				}
 			}
@@ -143,10 +146,11 @@ window.onload=init;
 		<div align=center id="answers">
 			
 			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
-			<div class="myradio" id="0">0</div><div class="myradio" id="1">1</div><div class="myradio" id="2">2</div><div  id="3" class="myradio">3</div><div class="myradio" id="4">4</div><div class="myradio" id="5">5</div><div class="myradio" id="6">6</div>
+			<div class="myradio" id="0">0</div><div class="myradio" id="1">1</div><div class="myradio" id="2">2</div><div  id="3" class="myradio">3</div><div class="myradio" id="4">4</div><div class="myradio" id="5">5</div><div class="myradio" id="6">6</div><div class="myradio" id="unsure" style="color:grey">unsure</div>
 		</div>
-		<br /><br />
+		
 		<div align=center id="buttonnext" style="clear:left">
+			<br /><br />
 			<button type="button" id="next">Next</button>
 		</div>
 		

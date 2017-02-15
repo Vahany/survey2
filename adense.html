@@ -5,12 +5,13 @@
 <link href="vcss/general.css" rel="stylesheet" type="text/css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="src/script.js"></script>
 
 <script>
-var questions = [[7,8],[6,10],[3,6],[4,5],[1,2],[2,3],[2,12],[1,9],[5,7],[4,7]];
+//var questions = [[7,8],[6,10],[3,6],[4,5],[1,2],[2,3],[2,12],[1,9],[5,7],[4,7]];
+//var answers = [8,6,3,5,2,3,12,9,5,4];
 
-var answers = [8,6,3,5,2,3,12,9,5,4];
-
+var questions,answers;
 var duration;
 var progressbarinner;
 
@@ -42,6 +43,8 @@ function createProgressbar(id, duration, callback) {
 
 
 function init(){
+	questions = denseQuestions;
+	answers = denseAnswers;
 	isnextclicked = false;
 	var myurl = window.location.href;
 	mode = myurl.substring(myurl.indexOf('type=')+5,myurl.indexOf('type=')+7)
@@ -57,7 +60,7 @@ function init(){
 		save();
 	};
 	
-	var myradios = document.getElementsByClassName("myradio");
+	var myradios = document.getElementsByClassName("mymradio");
 	for (var i =0; i<myradios.length; i++){
 		myradios[i].onclick = function(){
 			if (!isnextclicked){
@@ -79,7 +82,7 @@ function init(){
 
 function move_on(themode){
 	setTimeout(function(){
-		if (parseInt(questionnum) < 30) {
+		if (parseInt(questionnum) < (questions.length*modenum)) {
 			window.location.replace('dense.html?mode='+String(themode)+'&question='+String(parseInt(questionnum)+1));
 		}
 		else window.location.replace('thanks.html');
@@ -94,10 +97,8 @@ function save(){
 		order = users.dense.currentorder;
 		thequestion = users.dense.currentidx;
 		
-		var intmode, midx;
-		if (mode =="nl") {intmode = 2; midx = 0;
-		if (mode == "gt") {intmode = 1; midx = 1;}
-		else if (mode == "mx") {intmode = 3; midx = 2;}
+		var midx;
+		midx = getintmode(mode);
 		
 		var mygraphs = [];
 
@@ -118,17 +119,15 @@ function save(){
 			data: JSON.stringify(savejson), //your data
 			success: function (response) {
 				//update users file
-				if (parseInt(questionnum) == 30) {
+				if (parseInt(questionnum) == (questions.length*modenum)) {
 					var oldmode, newmode;
 					oldmode = users.dense.usermode;
-					if (oldmode == "nl") newmode = "gt";
-					else if (oldmode=="gt") newmode = "mx";
-					else if (oldmode=="mx") newmode = "nl";
+					newmode = getnextmode(oldmode);
 					users.dense.usermode = newmode;
 					users.dense.currentmode = users.dense.usermode;
 					
-					for (var imode =0; imode< 3; imode++){
-						if (users.dense.useridx[imode] <9) users.dense.useridx[imode] = users.dense.useridx[imode]+1;
+					for (var imode =0; imode< modenum; imode++){
+						if (users.dense.useridx[imode] < questions.length-1) users.dense.useridx[imode] = users.dense.useridx[imode]+1;
 						else users.dense.useridx[imode] = 0;
 						users.dense.currentidx[imode] = users.dense.useridx[imode];
 					}
@@ -143,12 +142,10 @@ function save(){
 				}
 				else{
 					var newmode;
-					if (mode == "nl") newmode = "gt";
-					else if (mode=="gt") newmode = "mx";
-					else if (mode=="mx") newmode = "nl";
+					newmode = getnextmode(mode);
 					users.dense.currentmode = newmode;
 					
-					if (users.dense.currentidx[midx] <9) users.dense.currentidx[midx] = users.dense.currentidx[midx]+1;
+					if (users.dense.currentidx[midx] < questions.length-1) users.dense.currentidx[midx] = users.dense.currentidx[midx]+1;
 					else users.dense.currentidx[midx] = 0;
 					
 					for (var imode =0; imode< 2; imode++){
@@ -188,17 +185,18 @@ window.onload=init;
 
 	<div class="main_div" align=center height="800px">
 		<br /><br />
-		<div align=center id="answers">
+		<div id="top" style="height:75px"></div>
+		<div align=center id="answers" style="width:680px">
 			
 			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
-			<div class="myradio" id="A">A</div><div class="myradio" id="B">B</div><div class="myradio" id="unsure">unsure</div>
+			<div class="mymradio" id="A">A</div><div class="mymradio" id="B">B</div>
 		</div>
-		<br /><br />
+		<div class="mymradio" style="width:150px; height:300px;" id="unsure">unsure</div>
+		
 		<div align=center id="buttonnext" style="clear:left">
+		<br /><br />
 			<button type="button" id="next">Next</button>
 		</div>
-		
-		
 	</div>
 
 </body>

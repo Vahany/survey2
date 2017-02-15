@@ -19,6 +19,8 @@ var picked;
 
 var isnextclicked;
 
+var iscorrect;
+
 
 function createProgressbar(id, duration, callback) {
   // We select the div that we want to turn into a progressbar
@@ -56,18 +58,21 @@ function init(){
 		save();
 	};
 	
-	var myradios = document.getElementsByClassName("myradio");
+	var myradios = document.getElementsByClassName("mymradio");
 	for (var i =0; i<myradios.length; i++){
 		myradios[i].onclick = function(){
 			if (!isnextclicked){
-				document.getElementById('next').disabled = false;
-				this.style.border = "5px solid blue";
-				this.style.color = "blue";
-				picked = this.id;
-				for (var j=0;j<myradios.length; j++){	
-					if (myradios[j]!=this){
-						myradios[j].style.border = "1px solid black";
-						myradios[j].style.color = "black";
+				if (this.id == "unsure") alert("you can't pick this option for training purposes");
+				else{
+					document.getElementById('next').disabled = false;
+					this.style.border = "5px solid blue";
+					this.style.color = "blue";
+					picked = this.id;
+					for (var j=0;j<myradios.length; j++){	
+						if (myradios[j]!=this){
+							myradios[j].style.border = "1px solid black";
+							myradios[j].style.color = "black";
+						}
 					}
 				}
 			}
@@ -77,7 +82,7 @@ function init(){
 }
 
 function move_on(){
-	if (picked!=thecorrectanswer[parseInt(questionnum)-1]){
+	if (!iscorrect){
 		document.getElementById(picked).style.border = "5px solid red";
 		document.getElementById(picked).style.color = "red";
 		
@@ -109,7 +114,7 @@ function save(){
 		if (picked == "A") thepicked = demo[parseInt(questionnum)-1][0];
 		else if (picked == "B") thepicked = demo[parseInt(questionnum)-1][1];
 		console.log(userid);
-		var iscorrect;
+		
 		iscorrect = (thepicked == thecorrectanswer);
 
 		var savejson = {"filename":"tdense","userid":userid,"visrep":mode,"graph1":demo[parseInt(questionnum)-1][0],"graph2":demo[parseInt(questionnum)-1][1],"answers":picked,"question":questionnum, "correct":iscorrect, "correctanswer":thecorrectanswer, "duration":duration};
@@ -135,13 +140,16 @@ window.onload=init;
 
 	<div class="main_div" align=center height="800px">
 		<br /><br />
-		<div align=center id="answers">
+		<div id="top" style="height:75px"></div>
+		<div align=center id="answers" style="width:680px">
 			
 			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
-			<div class="myradio" id="A">A</div><div class="myradio" id="B">B</div>
+			<div class="mymradio" id="A">A</div><div class="mymradio" id="B">B</div>
 		</div>
-		<br /><br />
+		<div class="mymradio" style="width:150px; height:300px;" id="unsure">unsure</div>
+		
 		<div align=center id="buttonnext" style="clear:left">
+		<br /><br />
 			<button type="button" id="next">Next</button>
 		</div>
 		

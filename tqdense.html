@@ -93,27 +93,25 @@ window.onload=init;
 <body>
 	
 	<div id='progressbar1'></div>
-	<br />
-	<br />
-	<br />
-	<div class="main_div" align=center height="800px">
+	<div style="height:20px;" align=center>
+		<p id="msg" style="font-weight:bold; color:red"></p>
+	</div>
+	<br /><br />
+	<div class="main_div" align=center>
 		
-		<div id='imagewrapper' style="height:150px; display:none">
+		<div id='imagewrapper' style="display:none">
 			<div id='myimages'>
 				<img class="survey_img" id="0" onload="xload(this)"/>
 				<img class="survey_img" id="1" onload="xload(this)"/>
 
 				<p style="word-spacing:160px; font-weight:bold">A B</p>
-
-			</div>
-			<div style="margin-top:50px">
-				<p id="msg" style="font-weight:bold; color:red"></p>
 			</div>
 		</div>
-		
-		
-		
+		<div style="background-color:red; height:50px; width:800px; margin-top:200px">
+			<p style="font-weight:bold; color:white">TRAINING : PRESS SPACE WHEN READY</p>
+		</div>
 	</div>
+	
 
 </body>
 </html>

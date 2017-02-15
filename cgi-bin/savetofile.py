@@ -11,6 +11,19 @@ filename = input['filename']
 answers = input['answers']
 logfile.write(json.dumps(input))
 if (filename.find('tute') != -1):
+    thefilename = 'users//'+str(userid)+'//tutorial.json'
+    if (os.path.isfile(thefilename)): 
+        file = open(thefilename,'r')
+        existing = json.load(file)
+        logfile.write(json.dumps(existing['slide'][0]))
+        existing['slide'].append({'number':input['slidenum'], 'duration':input['duration']})
+        file.close()
+        file = open(thefilename,'w')
+        file.write(json.dumps(existing))
+    else:
+        file = open(thefilename,'w')
+        file.write(json.dumps({'slide':[{'number':input['slidenum'], 'duration':input['duration']}]}))
+    '''
     if (filename == 'tute1'): 
         file = open('users//'+str(userid)+'//tutorial.json','w')
         file.write(json.dumps({'tute1':input['duration']}))
@@ -24,6 +37,7 @@ if (filename.find('tute') != -1):
         file.close()
         file = open('users//'+str(userid)+'//tutorial.json','w')
         file.write(json.dumps(existing))
+    '''
 elif (filename.find('tconnectivity') != -1):
     if (os.path.isfile('users//'+str(userid)+'//training.json')): 
         file = open('users//'+str(userid)+'//training.json','r')
@@ -70,7 +84,7 @@ elif (filename.find('matching') != -1):
         file.write(json.dumps(existing))
     else:
         file = open(jsonname,'w')
-        file.write(json.dumps({'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'refgraph':input['refgraph'],'graph1':input['graph1'],'graph2':input['graph2'],'graph3':input['graph3'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']}))
+        file.write(json.dumps({filename:[{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'refgraph':input['refgraph'],'graph1':input['graph1'],'graph2':input['graph2'],'graph3':input['graph3'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']}]}))
 elif (filename.find('dense') != -1):
     if (filename.find('tdense') != -1):
         jsonname = 'users//'+str(userid)+'//training.json'
@@ -88,7 +102,7 @@ elif (filename.find('dense') != -1):
         file.write(json.dumps(existing))
     else:
         file = open(jsonname,'w')
-        file.write(json.dumps({'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph1':input['graph1'],'graph2':input['graph2'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']}))
+        file.write(json.dumps({filename:[{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph1':input['graph1'],'graph2':input['graph2'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']}]}))
 elif (filename.find('background') != -1):
     logfile.write('background\n')
     file = open('users//'+str(userid)+'//'+filename+'.json','w')
@@ -104,6 +118,7 @@ elif (filename.find('email') != -1):
 file.close()
 logfile.close()
 
-print("Content-Type: application/json")
-print(json.dumps({"status":"done"})
+sys.stdout.write("Content-Type: application/json")
+sys.stdout.write("\n\n")
+sys.stdout.write(json.dumps({"status":"done"}))
 

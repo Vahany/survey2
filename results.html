@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="src/script.js"></script>
+
+
+<script>
+var con1, con2, con3, match, dense;
+var results = [0,0,0,0,0];
+
+var maxwidth = 500;
+var totalcount = 35+35+35+28+35;
+
+function init(){
+	finished = 0;
+	d3.json("data/users.json",function(users){
+		userid = users.usercount;
+		d3.json("users/"+String(userid)+"/connectivity.json",function(data){
+			con1 = data['connectivity1'];
+			for (var i=0; i< con1.length; i++){
+				if (con1[i].iscorrect) results[0]++;
+			}
+			con2 = data['connectivity2'];
+			for (var i=0; i< con2.length; i++){
+				if (con2[i].iscorrect) results[1]++;
+			}
+			con3 = data['connectivity3'];
+			for (var i=0; i< con3.length; i++){
+				if (con3[i].iscorrect) results[2]++;
+			}
+			finished++;
+			draw();
+		});
+		d3.json("users/"+String(userid)+"/matching.json",function(data){
+			match = data['matching'];
+			match.forEach(function(mch){
+				if (mch.iscorrect) results[3]++;
+			});
+			finished++;
+			draw();
+		});
+		d3.json("users/"+String(userid)+"/dense.json",function(data){
+			dense = data['dense'];
+			dense.forEach(function(dns){
+				if (dns.iscorrect) results[4]++;
+			});
+			finished++;
+			draw();
+		});
+	});
+	
+	function draw(){
+		if (finished == 3){
+			var totalresult =0;
+			for (var i=0; i<results.length; i++){
+				totalresult = totalresult + results[i];
+			}
+			var percentage = totalresult * 100 / totalcount;
+			var newwidth = percentage * maxwidth /100;
+			//document.getElementById('total').width = 
+			d3.select("#total").attr('width',newwidth);
+			document.getElementById('percent').innerHTML = String(Math.round(percentage))+"%";
+			console.log(totalresult);
+		}
+	}
+	
+}
+
+window.onload=init;
+
+
+
+
+
+</script>
+
+</head>
+<body>
+
+	<br />
+	<br />
+	<p id="percent"></p>
+	<div style="width:500px; height:50px; border:5px solid black;">
+		<svg width="500px"; height="50px";>
+			<rect id="total" width="500px"; height="50px"; style="fill:green"></rect>
+		</svg>
+	</div>
+
+</body>
+</html>

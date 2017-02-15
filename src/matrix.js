@@ -138,9 +138,13 @@ function matrix(mg, mw, mh) {
     .enter().append("g")
       .attr("id", function(d, i) { return "col"+i; })
       .attr("class", "column")
-      .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
+      //.attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
+	  .attr("transform", function(d, i) { return "translate(" + x(i) + ")"; });
 
-  column.append("line")
+	column.append("line")
+      .attr("y2", mw);
+	  
+  /*column.append("line")
       .attr("x1", -mw);
 
   column.append("text")
@@ -148,14 +152,30 @@ function matrix(mg, mw, mh) {
       .attr("y", x.rangeBand() / 2)
       .attr("dy", ".32em")
       .attr("text-anchor", "start")
+      .text(function(d, i) { return nodes[i].name; });*/
+	  
+	  column.append("text")
+	  .attr("y", -12)
+	  .attr("x", x.rangeBand() / 2 + 6)
+      .attr("dy", ".32em")
+      .attr("text-anchor", "end")
       .text(function(d, i) { return nodes[i].name; });
 	  
-	column.append("rect")
+	/*column.append("rect")
 		.attr("class", "columnr")
 		.attr("x",-mw)
 		.attr("y",0)
 		.attr("width",mw)
 		.attr("height",x.rangeBand())
+		.style("fill","white")
+		.style("fill-opacity",0);*/
+		
+	column.append("rect")
+		.attr("class", "columnr")
+		.attr("x",0)
+		.attr("y",0)
+		.attr("width",x.rangeBand())
+		.attr("height",mw)
 		.style("fill","white")
 		.style("fill-opacity",0);
 		
@@ -203,9 +223,14 @@ function matrix(mg, mw, mh) {
             .delay(function(d) { return x(d.x) * 4; })
             .attr("x", function(d) { return x(d.x); });
 
-	t.selectAll(".column")
+	/*t.selectAll(".column")
             .delay(function(d, i) { return x(i) * 4; })
             .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(-90)"; });
+    }*/
+	
+	t.selectAll(".column")
+            .delay(function(d, i) { return x(i) * 4; })
+            .attr("transform", function(d, i) { return "translate(" + x(i) + ")rotate(0)"; });
     }
 
     function distance(value) {

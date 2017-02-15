@@ -5,11 +5,13 @@
 <link href="vcss/general.css" rel="stylesheet" type="text/css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="src/script.js"></script>
 
 <script>
-var questions = [[1,1,2,10],[2,13,3,9],[3,16,7,37],[4,4,5,12],[5,22,8,40],[6,6,38,11],[7,28,31,34],[8,32,23,19],[9,35,29,39],[10,10,14,30]];
+//var questions = [[1,1,2,10],[2,13,3,9],[3,16,7,37],[4,4,5,12],[5,22,8,40],[6,6,38,11],[7,28,31,34],[8,32,23,19],[9,35,29,39],[10,10,14,30]];
 
-var answers = [1,13,16,4,22,6,28,32,35,10];
+//var answers = [1,13,16,4,22,6,28,32,35,10];
+var questions, answers;
 
 var duration;
 var progressbarinner;
@@ -42,6 +44,10 @@ function createProgressbar(id, duration, callback) {
 
 
 function init(){
+
+	questions = matchingQuestions;
+	answers = matchingAnswers;
+
 	isnextclicked = false;
 	var myurl = window.location.href;
 	mode = myurl.substring(myurl.indexOf('type=')+5,myurl.indexOf('type=')+7)
@@ -57,7 +63,7 @@ function init(){
 		save();
 	};
 	
-	var myradios = document.getElementsByClassName("myradio");
+	var myradios = document.getElementsByClassName("mymradio");
 	for (var i =0; i<myradios.length; i++){
 		myradios[i].onclick = function(){
 			if (!isnextclicked){
@@ -79,7 +85,7 @@ function init(){
 
 function move_on(themode){
 	setTimeout(function(){
-		if (parseInt(questionnum) < 20) {
+		if (parseInt(questionnum) < (questions.length*mmodenum)) {
 			window.location.replace('matching.html?mode='+String(themode)+'&question='+String(parseInt(questionnum)+1));
 		}
 		else window.location.replace('denseintro.html');
@@ -94,9 +100,21 @@ function save(){
 		order = users.matching.currentorder;
 		thequestion = users.matching.currentidx;
 		
-		var intmode, midx;
-		if (mode == "gt") {intmode = 1; midx = 0;}
-		else if (mode == "mx") {intmode = 3; midx = 1;}
+		var imgidx, midx;
+		midx = getmidx(mode);
+		imgidx = getidxmode(mode);
+		if ((mode == "cg") || (mode == "cm")) {
+			var altidx = getidxmode("cn");
+			//questions = matchingCQuestions;
+			//answers = matchingCAnswers;
+		}
+		else {
+			var altidx = getidxmode("nl");
+			//questions = matchingQuestions;
+			//answers = matchingAnswers;
+		}
+		
+
 		
 		var mygraphs = [];
 		mygraphs.push(questions[parseInt(thequestion[midx])][0]);
@@ -118,16 +136,15 @@ function save(){
 			data: JSON.stringify(savejson), //your data
 			success: function (response) {
 				//update users file
-				if (parseInt(questionnum) == 20) {
+				if (parseInt(questionnum) == (questions.length*mmodenum)) {
 					var oldmode, newmode;
 					oldmode = users.matching.usermode;
-					if (oldmode=="gt") newmode = "mx";
-					else if (oldmode=="mx") newmode = "gt";
+					newmode = getnextmmode(oldmode);
 					users.matching.usermode = newmode;
 					users.matching.currentmode = users.matching.usermode;
-					
-					for (var imode =0; imode< 2; imode++){
-						if (users.matching.useridx[imode] <9) users.matching.useridx[imode] = users.matching.useridx[imode]+1;
+					//cg and cm
+					for (var imode =0; imode< mmodenum; imode++){
+						if (users.matching.useridx[imode] < questions.length-1) users.matching.useridx[imode] = users.matching.useridx[imode]+1;
 						else users.matching.useridx[imode] = 0;
 						users.matching.currentidx[imode] = users.matching.useridx[imode];
 					}
@@ -142,11 +159,10 @@ function save(){
 				}
 				else{
 					var newmode;
-					if (mode=="gt") newmode = "mx";
-					else if (mode=="mx") newmode = "gt";
+					newmode = getnextmmode(mode);
 					users.matching.currentmode = newmode;
 					
-					if (users.matching.currentidx[midx] <9) users.matching.currentidx[midx] = users.matching.currentidx[midx]+1;
+					if (users.matching.currentidx[midx] < questions.length-1) users.matching.currentidx[midx] = users.matching.currentidx[midx]+1;
 					else users.matching.currentidx[midx] = 0;
 					
 					for (var imode =0; imode< 3; imode++){
@@ -184,15 +200,18 @@ window.onload=init;
 <body>
 
 
-	<div class="main_div" align=center height="800px">
+	<div class="main_div" align=center>
 		<br /><br />
-		<div align=center id="answers">
+		<div id="top" style="height:320px"></div>
+		<div align=center id="manswers">
 			
 			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
-			<div class="myradio" id="A">A</div><div class="myradio" id="B">B</div><div class="myradio" id="C">C</div><div class="myradio" id="unsure">unsure</div>
+			<div class="mymradio" id="A">A</div><div class="mymradio" id="B">B</div><div class="mymradio" id="C">C</div>
 		</div>
-		<br /><br />
+		<div class="mymradio" style="width:150px; height:300px;" id="unsure">unsure</div>
+		
 		<div align=center id="buttonnext" style="clear:left">
+			<br /><br />
 			<button type="button" id="next">Next</button>
 		</div>
 		

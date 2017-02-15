@@ -1,1 +1,1 @@
-{"tconnectivity1": [{"answer": "2", "graph": 10, "visrep": "nl", "duration": "11473"}, {"answer": "4", "graph": 10, "visrep": "nl", "duration": "29011"}, {"answer": "4", "visrep": "gt", "graph": 10, "duration": "5173"}]}
+{"tconnectivity1": [{"graph": 12, "answer": "2", "duration": "2480", "visrep": "nl"}, {"graph": 12, "answer": "2", "duration": "536", "visrep": "gt"}, {"answer": "2", "visrep": "mx", "duration": "2562", "graph": 12}]}

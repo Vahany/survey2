@@ -3,7 +3,12 @@ function draw_force(svg, mygid, callback) {
 	var node_radius = 5;
 
 	var mysvg = svg.append('g').attr("id",mygid);
-
+	
+	mygraph.nodes.forEach(function(node){
+		node.x = 100;
+		node.y = 100;
+		
+	});
 	var force = d3.layout.force()
 		.size([size.width, size.height])
 		.nodes(mygraph.nodes)
@@ -14,6 +19,20 @@ function draw_force(svg, mygid, callback) {
 	var counter = 0;
 
 	function tick() {
+		
+		/*node.attr('r',  node_radius)
+				.attr('cx', function (d) {
+					return d.x;
+				})
+				.attr('cy', function (d) {
+					return d.y;
+				});
+		
+		link.attr('x1', function (d) { return d.source.x; })
+				.attr('y1', function (d) { return d.source.y; })
+				.attr('x2', function (d) { return d.target.x; })
+				.attr('y2', function (d) { return d.target.y; });*/
+		
 		counter++;
 	}
 	
@@ -35,7 +54,7 @@ function draw_force(svg, mygid, callback) {
 		.data(mygraph.nodes)
 		.enter().append('text')
 		.text(function(d){return d.name;})
-		.style('font-size',8)
+		.style('font-size','8px')
 		.style('fill','white');
 
 	 minx = Infinity, miny = Infinity;
