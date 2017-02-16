@@ -6,14 +6,80 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script src="src/script.js"></script>
+<style>
 
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+</style>
 
 <script>
 var con1, con2, con3, match, dense;
-var results = [0,0,0,0,0];
+var tcon1 = 35, tcon2 = 35, tmatch = 28, tdense = 50;
+var results = [0,0,0,0];
+
+var visreps = ["nl","gt","mx","cn","cm"];
+var mxvisreps = ["gt","mx","cg","cm"];
+
+var con1results = {"nl":{"correct":0,"incorrect":0},"gt":{"correct":0,"incorrect":0},"mx":{"correct":0,"incorrect":0},"cn":{"correct":0,"incorrect":0},"cm":{"correct":0,"incorrect":0}};
+var con2results = {"nl":{"correct":0,"incorrect":0},"gt":{"correct":0,"incorrect":0},"mx":{"correct":0,"incorrect":0},"cn":{"correct":0,"incorrect":0},"cm":{"correct":0,"incorrect":0}};
+var matchresults = {"gt":{"correct":0,"incorrect":0},"mx":{"correct":0,"incorrect":0},"cg":{"correct":0,"incorrect":0},"cm":{"correct":0,"incorrect":0}};
+var denseresults = {"nl":{"correct":0,"incorrect":0},"gt":{"correct":0,"incorrect":0},"mx":{"correct":0,"incorrect":0},"cn":{"correct":0,"incorrect":0},"cm":{"correct":0,"incorrect":0}};
+
+var con1pie =[], con2pie=[], matchpie=[], densepie=[];
 
 var maxwidth = 500;
-var totalcount = 35+35+35+28+35;
+var totalcount = tcon1+tcon2+tmatch+tdense;//35+35+35+28+35;
+
+function draw_pie(container, data){
+	var width = 960,
+		height = 500,
+		radius = Math.min(width, height) / 2;
+
+	var color = d3.scale.ordinal()
+		//.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+		.range(["#7fc97f", "#beaed4", "#fdc086", "#ffff99", "#386cb0"]);
+		
+
+	var arc = d3.svg.arc()
+		.outerRadius(radius - 10)
+		.innerRadius(0);
+
+	var labelArc = d3.svg.arc()
+		.outerRadius(radius - 40)
+		.innerRadius(radius - 40);
+
+	var pie = d3.layout.pie()
+		.sort(null)
+		.value(function(d) { return d.mypercentage; });
+
+	var svg = container.append("svg")
+		.attr("width", width)
+		.attr("height", height)
+	  .append("g")
+		.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+
+	  var g = svg.selectAll(".arc")
+		  .data(pie(data))
+		.enter().append("g")
+		  .attr("class", "arc");
+
+	  g.append("path")
+		  .attr("d", arc)
+		  .style("fill", function(d) { return color(d.data.myvisrep); });
+
+	  g.append("text")
+		  .attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+		  .attr("dy", ".35em")
+		  .text(function(d) { return d.data.myvisrep; });
+}
 
 function init(){
 	finished = 0;
@@ -22,23 +88,41 @@ function init(){
 		d3.json("users/"+String(userid)+"/connectivity.json",function(data){
 			con1 = data['connectivity1'];
 			for (var i=0; i< con1.length; i++){
-				if (con1[i].iscorrect) results[0]++;
+				if (con1[i].iscorrect) {
+					results[0]++;
+					con1results[con1[i].visrep]["correct"]++;
+				}
+				else{
+					con1results[con1[i].visrep]["incorrect"]++;
+				}
 			}
 			con2 = data['connectivity2'];
 			for (var i=0; i< con2.length; i++){
-				if (con2[i].iscorrect) results[1]++;
+				if (con2[i].iscorrect) {
+					results[1]++;
+					con2results[con2[i].visrep]["correct"]++;
+				}
+				else{
+					con2results[con2[i].visrep]["incorrect"]++;
+				}
 			}
-			con3 = data['connectivity3'];
+			/*con3 = data['connectivity3'];
 			for (var i=0; i< con3.length; i++){
 				if (con3[i].iscorrect) results[2]++;
-			}
+			}*/
 			finished++;
 			draw();
 		});
 		d3.json("users/"+String(userid)+"/matching.json",function(data){
 			match = data['matching'];
 			match.forEach(function(mch){
-				if (mch.iscorrect) results[3]++;
+				if (mch.iscorrect) {
+					results[2]++;
+					matchresults[mch.visrep]["correct"]++;
+				}
+				else{
+					matchresults[mch.visrep]["incorrect"]++;
+				}
 			});
 			finished++;
 			draw();
@@ -46,7 +130,13 @@ function init(){
 		d3.json("users/"+String(userid)+"/dense.json",function(data){
 			dense = data['dense'];
 			dense.forEach(function(dns){
-				if (dns.iscorrect) results[4]++;
+				if (dns.iscorrect) {
+					results[3]++;
+					denseresults[dns.visrep]["correct"]++;
+				}
+				else{
+					denseresults[dns.visrep]["incorrect"]++;
+				}
 			});
 			finished++;
 			draw();
@@ -55,6 +145,26 @@ function init(){
 	
 	function draw(){
 		if (finished == 3){
+			var percentage = results[0] * 100 / tcon1;
+			var newwidth = percentage * maxwidth /100;
+			d3.select("#task1").attr('width',newwidth);
+			d3.select('#task1p').text("Finding 1-connected components : "+String(Math.round(percentage))+"%");
+			
+			var percentage = results[1] * 100 / tcon2;
+			var newwidth = percentage * maxwidth /100;
+			d3.select("#task2").attr('width',newwidth);
+			d3.select('#task2p').text("Finding 2-connected components : "+String(Math.round(percentage))+"%");
+			
+			var percentage = results[2] * 100 / tmatch;
+			var newwidth = percentage * maxwidth /100;
+			d3.select("#task3").attr('width',newwidth);
+			d3.select('#task3p').text("Matching : "+String(Math.round(percentage))+"%");
+			
+			var percentage = results[3] * 100 / tdense;
+			var newwidth = percentage * maxwidth /100;
+			d3.select("#task4").attr('width',newwidth);
+			d3.select('#task4p').text("Finding denser networks : "+String(Math.round(percentage))+"%");
+		
 			var totalresult =0;
 			for (var i=0; i<results.length; i++){
 				totalresult = totalresult + results[i];
@@ -63,8 +173,75 @@ function init(){
 			var newwidth = percentage * maxwidth /100;
 			//document.getElementById('total').width = 
 			d3.select("#total").attr('width',newwidth);
-			document.getElementById('percent').innerHTML = String(Math.round(percentage))+"%";
+			d3.select('#percent').text(String(Math.round(percentage))+"%");
 			console.log(totalresult);
+			
+			//---------------------
+			//var rects = d3.selectAll(".task1");
+			//rects = rects[0];
+			var percentage, newwidth, currentpos=0;
+			//for (var i =0; i<rects.length; i++){
+				for (var j=0; j<visreps.length;j++){
+					var rect = d3.select('.task1#'+visreps[j])
+								.attr("x",currentpos);
+					//if (rects[i].id == visreps[j]){
+						//rects[i].x = newwidth;
+						percentage = con1results[visreps[j]]["correct"] * 100 / tcon1;
+						var localpercentage = Math.round((con1results[visreps[j]]["correct"] * 100) / (con1results[visreps[j]]["correct"] + con1results[visreps[j]]["incorrect"]));
+						con1pie.push({"myvisrep":visreps[j],"mypercentage":localpercentage});
+						d3.select('text.task1#'+visreps[j]).attr("x",currentpos+5).attr("y",25).style("fill","black").text(String(localpercentage));
+						
+						newwidth = percentage * maxwidth /100;
+						currentpos = currentpos+newwidth;
+						rect.attr("width",newwidth).attr("title",String(localpercentage));
+						//rects[i],width = newwidth;
+					//}
+				}
+			//}
+			
+			var percentage, newwidth, currentpos=0;
+			for (var j=0; j<visreps.length;j++){
+				var rect = d3.select('.task2#'+visreps[j])
+							.attr("x",currentpos);
+				percentage = con2results[visreps[j]]["correct"] * 100 / tcon2;
+				var localpercentage = Math.round((con2results[visreps[j]]["correct"] * 100) / (con2results[visreps[j]]["correct"] + con2results[visreps[j]]["incorrect"]));
+				con2pie.push({"myvisrep":visreps[j],"mypercentage":localpercentage});
+				d3.select('text.task2#'+visreps[j]).attr("x",currentpos+5).attr("y",25).style("fill","black").text(String(localpercentage));
+				newwidth = percentage * maxwidth /100;
+				currentpos = currentpos+newwidth;
+				rect.attr("width",newwidth).attr("title",String(localpercentage));
+			}
+			
+			var percentage, newwidth, currentpos=0;
+			for (var j=0; j<mxvisreps.length;j++){
+				var rect = d3.select('.match#'+mxvisreps[j])
+							.attr("x",currentpos);
+				percentage = matchresults[mxvisreps[j]]["correct"] * 100 / tmatch;
+				var localpercentage = Math.round((matchresults[mxvisreps[j]]["correct"] * 100) / (matchresults[mxvisreps[j]]["correct"] + matchresults[mxvisreps[j]]["incorrect"]));
+				matchpie.push({"myvisrep":mxvisreps[j],"mypercentage":localpercentage});
+				d3.select('text.match#'+mxvisreps[j]).attr("x",currentpos+5).attr("y",25).style("fill","black").text(String(localpercentage));
+				newwidth = percentage * maxwidth /100;
+				currentpos = currentpos+newwidth;
+				rect.attr("width",newwidth).attr("title",String(localpercentage));
+			}
+			
+			var percentage, newwidth, currentpos=0;
+			for (var j=0; j<visreps.length;j++){
+				var rect = d3.select('rect.dense#'+visreps[j])
+							.attr("x",currentpos);
+				percentage = denseresults[visreps[j]]["correct"] * 100 / tdense;
+				var localpercentage = Math.round((denseresults[visreps[j]]["correct"] * 100) / (denseresults[visreps[j]]["correct"] + denseresults[visreps[j]]["incorrect"]));
+				densepie.push({"myvisrep":visreps[j],"mypercentage":localpercentage});
+				d3.select('text.dense#'+visreps[j]).attr("x",currentpos+5).attr("y",25).style("fill","black").text(String(localpercentage));
+				newwidth = percentage * maxwidth /100;
+				currentpos = currentpos+newwidth;
+				rect.attr("width",newwidth).attr("title",String(localpercentage));
+			}
+			
+			
+			draw_pie(d3.select("#con1pie"), con1pie);
+			draw_pie(d3.select("#con2pie"), con2pie);
+			draw_pie(d3.select("#densepie"), densepie);
 		}
 	}
 	
@@ -83,12 +260,127 @@ window.onload=init;
 
 	<br />
 	<br />
-	<p id="percent"></p>
-	<div style="width:500px; height:50px; border:5px solid black;">
-		<svg width="500px"; height="50px";>
-			<rect id="total" width="500px"; height="50px"; style="fill:green"></rect>
-		</svg>
+	<div style="padding: 20px 20px 20px 20px;">
+		
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect id="task1" width="500px"; height="50px"; style="fill:green"></rect>
+				<text id="task1p" x="20" y="25" width="500" fill="orange" height="50" ></text>
+			</svg>
+		</div>
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect id="task2" width="500px"; height="50px"; style="fill:green"></rect>
+				<text id="task2p" x="20" y="25" width="500" fill="orange" height="50" ></text>
+			</svg>
+		</div>
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect id="task3" width="500px"; height="50px"; style="fill:green"></rect>
+				<text id="task3p" x="20" y="25" width="500" fill="orange" height="50" ></text>
+			</svg>
+		</div>
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect id="task4" width="500px"; height="50px"; style="fill:green"></rect>
+				<text id="task4p" x="20" y="25" width="500" fill="orange" height="50" ></text>
+			</svg>
+		</div>
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect id="total" width="500px"; height="50px"; style="fill:green"></rect>
+				<text id="percent" x="20" y="25" width="500" fill="orange" height="50" ></text>
+			</svg>
+		</div>
 	</div>
-
+	
+	
+	<div style="padding: 20px 20px 20px 20px;">
+		
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect class="task1" id="nl" width="500px"; height="50px"; style="fill:#7fc97f"></rect>
+				<rect class="task1" id="gt" width="500px"; height="50px"; style="fill:#beaed4"></rect>
+				<rect class="task1" id="mx" width="500px"; height="50px"; style="fill:#fdc086"></rect>
+				<rect class="task1" id="cn" width="500px"; height="50px"; style="fill:#ffff99"></rect>
+				<rect class="task1" id="cm" width="500px"; height="50px"; style="fill:#386cb0"></rect>
+				
+				<text class="task1" id="nl"></text>
+				<text class="task1" id="gt"></text>
+				<text class="task1" id="mx"></text>
+				<text class="task1" id="cn"></text>
+				<text class="task1" id="cm"></text>
+				
+			</svg>
+		</div>
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect class="task2" id="nl" width="500px"; height="50px"; style="fill:#7fc97f"></rect>
+				<rect class="task2" id="gt" width="500px"; height="50px"; style="fill:#beaed4"></rect>
+				<rect class="task2" id="mx" width="500px"; height="50px"; style="fill:#fdc086"></rect>
+				<rect class="task2" id="cn" width="500px"; height="50px"; style="fill:#ffff99"></rect>
+				<rect class="task2" id="cm" width="500px"; height="50px"; style="fill:#386cb0"></rect>
+				
+				<text class="task2" id="nl"></text>
+				<text class="task2" id="gt"></text>
+				<text class="task2" id="mx"></text>
+				<text class="task2" id="cn"></text>
+				<text class="task2" id="cm"></text>
+			</svg>
+		</div>
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect class="match" id="gt" width="500px"; height="50px"; style="fill:#beaed4"></rect>
+				<rect class="match" id="mx" width="500px"; height="50px"; style="fill:#fdc086"></rect>
+				<rect class="match" id="cg" width="500px"; height="50px"; style="fill:#f0027f"></rect>
+				<rect class="match" id="cm" width="500px"; height="50px"; style="fill:#386cb0"></rect>
+				
+				<text class="match" id="gt"></text>
+				<text class="match" id="mx"></text>
+				<text class="match" id="cg"></text>
+				<text class="match" id="cm"></text>
+			</svg>
+		</div>
+		<div style="width:500px; height:50px; border:5px solid black;">
+			<svg width="500px"; height="50px";>
+				<rect class="dense" id="nl" width="500px"; height="50px"; style="fill:#7fc97f"></rect>
+				<rect class="dense" id="gt" width="500px"; height="50px"; style="fill:#beaed4"></rect>
+				<rect class="dense" id="mx" width="500px"; height="50px"; style="fill:#fdc086"></rect>
+				<rect class="dense" id="cn" width="500px"; height="50px"; style="fill:#ffff99"></rect>
+				<rect class="dense" id="cm" width="500px"; height="50px"; style="fill:#386cb0"></rect>
+				
+				<text class="dense" id="nl"></text>
+				<text class="dense" id="gt"></text>
+				<text class="dense" id="mx"></text>
+				<text class="dense" id="cn"></text>
+				<text class="dense" id="cm"></text>
+			</svg>
+		</div>
+	</div>
+	
+	<div style="padding: 20px 20px 20px 20px;">
+		
+		<div style="width:500px; height:50px;">
+			<svg width="500px"; height="50px";>
+				<circle r=10 cx=20 cy=15 style="fill:#7fc97f">nl</circle>
+				<circle r=10 cx=80 cy=15 style="fill:#beaed4">gt</circle>
+				<circle r=10 cx=140 cy=15 style="fill:#fdc086">mx</circle>
+				<circle r=10 cx=200 cy=15 style="fill:#ffff99">cn</circle>
+				<circle r=10 cx=260 cy=15 style="fill:#f0027f">cg</circle>
+				<circle r=10 cx=320 cy=15 style="fill:#386cb0">cm</circle>
+				
+				<text x=10 y=40 fill=black>nl</text>
+				<text x=70 y=40 fill=black>gt</text>
+				<text x=130 y=40 fill=black>mx</text>
+				<text x=190 y=40 fill=black>cn</text>
+				<text x=250 y=40 fill=black>cg</text>
+				<text x=310 y=40 fill=black>cm</text>
+			</svg>
+		</div>
+		
+	</div>
+	<div id="con1pie"><h3>connectivity 1</h3></div>
+	<div id="con2pie"><h3>connectivity 2</h3></div>
+	<div id="densepie"><h3>Dense</h3></div>
 </body>
 </html>

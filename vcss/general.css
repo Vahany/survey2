@@ -20,8 +20,8 @@ label{font-size:28px;}
 .survey_img_matching_nl{border:0px solid black; padding-left:100px; padding-bottom:0px; padding-top:100px; padding-right:100px; width:300px;}
 #tutorialtext{font-size:34px; font-family:sans-serif}
 
-.survey_img_dense{ padding: 0px 100px 0px 100px;}
 
+ #imagewrapper600{height:600px;}
 .matrixg rect{fill:white;}
 
 .child circle {fill: none;}
@@ -39,12 +39,15 @@ input {cursor: pointer}
  .mymradio#B {margin-left:100px;margin-right:100px;}
  .mymradio#unsure {margin-left:100px;width:100px; height:300px;}
  
- #imagewrapper600{height:600px;}
+ #imagewrapper_dense{height:600px; }
+
+ .survey_img_dense{ padding: 0px 50px 0px 50px;}
+ /*.survey_img_dense{ padding: 0px 50px 0px 100px; }*/
  
  #danswers {width:1308px;}
-.mydradio { width:600px; height:600px; line-height: 600px;text-align: center; margin-top:50px; margin-left: 0px; margin-right: 0px; margin-bottom:50px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;float:left}
- .mydradio#B {margin-left:100px;}
- .mydradio#unsure {margin-left:50px;width:100px; height:600px;}
+.mydradio { width:600px; height:600px; line-height: 600px;text-align: center; margin-top:50px; margin-left: 0px; margin-right: 0px; margin-bottom:20px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;float:left}
+ .mydradio#B {margin-left:75px;}
+ .mydradio#unsure {margin-left:20px;width:100px; height:600px;}
 
  
  .progressbar {

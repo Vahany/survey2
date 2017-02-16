@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+<meta charset="utf-8"/>
 <title>Graph Thumbnails Survey 2</title>
 <link href="vcss/general.css" rel="stylesheet" type="text/css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
@@ -76,7 +77,7 @@ function xload(elem){
   if (image_loaded.indexOf(parseInt(elem.id)) == -1 )
 	image_loaded.push(parseInt(elem.id));
   if (image_loaded.length == 2){
-	document.getElementById("imagewrapper600").style.display = "block";
+	document.getElementById("imagewrapper_dense").style.display = "block";
 	createProgressbar('progressbar1', '10s', showmsg);
 	document.body.onkeyup = function(e){
 		if(e.keyCode == 32){
@@ -100,7 +101,7 @@ window.onload=init;
 	<br /><br />
 	<div class="main_div" align=center>
 		
-		<div id='imagewrapper600' style="display:none">
+		<div id='imagewrapper_dense' style="display:none">
 			<div id='myimages'>
 				<img class="survey_img_dense" id="0" onload="xload(this)"/>
 				<img class="survey_img_dense" id="1" onload="xload(this)"/>
