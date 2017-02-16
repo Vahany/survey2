@@ -72,7 +72,7 @@ function init(){
 			var nl_image;
 			for (var ii=0; ii<=1;ii++){
 				nl_image = document.getElementById(String(ii));
-				nl_image.src = "images/matching/"+String(mygraphs[ii])+"."+String(imgidx)+".png";
+				nl_image.src = "images/matching_noR_600/"+String(mygraphs[ii])+"."+String(imgidx)+".png";
 			}
 		}
 	});
@@ -129,12 +129,12 @@ window.onload=init;
 	<br />
 	<div class="main_div" align=center height="800px">
 		
-		<div id='imagewrapper' style="height:150px; display:none">
+		<div id='imagewrapper' style="height:600px; display:none">
 			<div id='myimages'>
-				<img class="survey_img" id="0" />
-				<img class="survey_img" id="1" />
+				<img class="survey_img_dense" id="0" />
+				<img class="survey_img_dense" id="1" />
 
-				<p style="word-spacing:160px; font-weight:bold">A B</p>
+				<p style="word-spacing:700px; font-weight:bold">A B</p>
 
 			</div>
 		</div>

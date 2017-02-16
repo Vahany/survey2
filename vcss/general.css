@@ -17,8 +17,10 @@ label{font-size:28px;}
 
 .main_div{margin-left:50px; margin-right:50px;}
 .survey_img{border:0px solid black; padding:20px}
-.survey_img_matching_nl{border:0px solid black; padding-left:100px; padding-bottom:75px; padding-top:100px; padding-right:100px; width:300px;}
+.survey_img_matching_nl{border:0px solid black; padding-left:100px; padding-bottom:0px; padding-top:100px; padding-right:100px; width:300px;}
 #tutorialtext{font-size:34px; font-family:sans-serif}
+
+.survey_img_dense{ padding: 0px 100px 0px 100px;}
 
 .matrixg rect{fill:white;}
 
@@ -28,10 +30,21 @@ label {cursor:pointer}
 input {cursor: pointer}
 
  /*#manswers {width:980px;}*/
- #manswers {width:1525px;}
-.mymradio { width:300px; height:300px; line-height: 300px;text-align: center; margin-left: 100px; margin-right: 100px; margin-bottom:100px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;float:left}
+ /*2 px of border on each side +2 for when it gets highlighted*/
+ #manswers {width:1112px;}
+.mymradio { width:300px; height:300px; line-height: 300px;text-align: center; margin-left: 0px; margin-right: 0px; margin-bottom:50px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;float:left}
 .myradio { width:100px; height:100px; line-height: 100px;text-align: center; margin: 10px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;float:left}
  #answers {width:990px;}
+ 
+ .mymradio#B {margin-left:100px;margin-right:100px;}
+ .mymradio#unsure {margin-left:100px;width:100px; height:300px;}
+ 
+ #imagewrapper600{height:600px;}
+ 
+ #danswers {width:1308px;}
+.mydradio { width:600px; height:600px; line-height: 600px;text-align: center; margin-top:50px; margin-left: 0px; margin-right: 0px; margin-bottom:50px; border:1px solid black; cursor:pointer; font-weight:bold; font-size:24px;float:left}
+ .mydradio#B {margin-left:100px;}
+ .mydradio#unsure {margin-left:50px;width:100px; height:600px;}
 
  
  .progressbar {

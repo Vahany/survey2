@@ -68,7 +68,7 @@ function init(){
 		myradios[i].onclick = function(){
 			if (!isnextclicked){
 				document.getElementById('next').disabled = false;
-				this.style.border = "5px solid blue";
+				this.style.border = "2px solid blue";
 				this.style.color = "blue";
 				picked = this.id;
 				for (var j=0;j<myradios.length; j++){	
@@ -202,13 +202,13 @@ window.onload=init;
 
 	<div class="main_div" align=center>
 		<br /><br />
-		<div id="top" style="height:320px"></div>
+		<div id="top" style="height:400px"></div>
 		<div align=center id="manswers">
 			
 			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
 			<div class="mymradio" id="A">A</div><div class="mymradio" id="B">B</div><div class="mymradio" id="C">C</div>
 		</div>
-		<div class="mymradio" style="width:150px; height:300px;" id="unsure">unsure</div>
+		<div class="mymradio" id="unsure">unsure</div>
 		
 		<div align=center id="buttonnext" style="clear:left">
 			<br /><br />

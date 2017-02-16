@@ -56,7 +56,7 @@ function init(){
 	var nl_image;
 	for (var ii=0; ii<=1;ii++){
 		nl_image = document.getElementById(String(ii));
-		nl_image.src = "images/matching/"+String(demo[parseInt(questionnum)-1][ii])+"."+String(intmode)+".png";
+		nl_image.src = "images/matching_noR_600/"+String(demo[parseInt(questionnum)-1][ii])+"."+String(intmode)+".png";
 	}
 }
 
@@ -76,7 +76,7 @@ function xload(elem){
   if (image_loaded.indexOf(parseInt(elem.id)) == -1 )
 	image_loaded.push(parseInt(elem.id));
   if (image_loaded.length == 2){
-	document.getElementById("imagewrapper").style.display = "block";
+	document.getElementById("imagewrapper600").style.display = "block";
 	createProgressbar('progressbar1', '10s', showmsg);
 	document.body.onkeyup = function(e){
 		if(e.keyCode == 32){
@@ -100,12 +100,12 @@ window.onload=init;
 	<br /><br />
 	<div class="main_div" align=center>
 		
-		<div id='imagewrapper' style="display:none">
+		<div id='imagewrapper600' style="display:none">
 			<div id='myimages'>
-				<img class="survey_img" id="0" onload="xload(this)"/>
-				<img class="survey_img" id="1" onload="xload(this)"/>
+				<img class="survey_img_dense" id="0" onload="xload(this)"/>
+				<img class="survey_img_dense" id="1" onload="xload(this)"/>
 
-				<p style="word-spacing:160px; font-weight:bold">A B</p>
+				<p style="word-spacing:700px; font-weight:bold">A B</p>
 			</div>
 		</div>
 		<div style="background-color:red; height:50px; width:800px; margin-top:200px">

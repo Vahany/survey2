@@ -60,12 +60,12 @@ function init(){
 		save();
 	};
 	
-	var myradios = document.getElementsByClassName("mymradio");
+	var myradios = document.getElementsByClassName("mydradio");
 	for (var i =0; i<myradios.length; i++){
 		myradios[i].onclick = function(){
 			if (!isnextclicked){
 				document.getElementById('next').disabled = false;
-				this.style.border = "5px solid blue";
+				this.style.border = "2px solid blue";
 				this.style.color = "blue";
 				picked = this.id;
 				for (var j=0;j<myradios.length; j++){	
@@ -186,12 +186,12 @@ window.onload=init;
 	<div class="main_div" align=center height="800px">
 		<br /><br />
 		<div id="top" style="height:75px"></div>
-		<div align=center id="answers" style="width:680px">
+		<div align=center id="danswers" >
 			
 			<!--0 &nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6-->
-			<div class="mymradio" id="A">A</div><div class="mymradio" id="B">B</div>
+			<div class="mydradio" id="A">A</div><div class="mydradio" id="B">B</div>
 		</div>
-		<div class="mymradio" style="width:150px; height:300px;" id="unsure">unsure</div>
+		<div class="mydradio" id="unsure">unsure</div>
 		
 		<div align=center id="buttonnext" style="clear:left">
 		<br /><br />

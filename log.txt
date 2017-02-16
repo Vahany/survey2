@@ -1,1 +1,1 @@
-{"visrep": "gt", "graph1": 1, "userid": 8, "refgraph": 1, "question": "1", "filename": "tmatching", "correctanswer": 1, "answers": "A", "graph2": 2, "duration": "2049", "correct": true, "graph3": 9}
+{"duration": "1131", "question": "2", "graph2": 6, "answers": "A", "correct": false, "filename": "dense", "graph1": 10, "correctanswer": 6, "userid": 1, "visrep": "gt"}
