@@ -28,12 +28,25 @@ function init(){
 		}
 
 	});
+	
+	var myresults = [];
 
     document.getElementById('next').onclick=function(){
 		var end = new Date().getTime();
 		var duration = end - start;
 		
-		var radios = document.getElementsByName('mygroup1');
+		for (var radioname = 1; radioname < 5; radioname++){
+			var radios = document.getElementsByName('mygroup'+String(radioname));
+			for (var i = 0, length = radios.length; i < length; i++) {
+				if (radios[i].checked) {
+					myresults.push(radios[i].value);
+					break;
+				}
+			}
+		
+		}
+		
+		/*var radios = document.getElementsByName('mygroup1');
 		var myresult1 = "";
 		for (var i = 0, length = radios.length; i < length; i++) {
 			if (radios[i].checked) {
@@ -42,8 +55,6 @@ function init(){
 			}
 		}
 		
-		
-
 		radios = document.getElementsByName('mygroup2');
 		var myresult2 = "";
 		for (var i = 0, length = radios.length; i < length; i++) {
@@ -62,8 +73,8 @@ function init(){
 				break;
 			}
 		}*/
-		var answers = [myresult1, myresult2];
-		
+		//var answers = [myresult1, myresult2];
+		var answers = myresults;
 
 		var backgroundjson = {"filename":"background","userid":userid,"answers":answers, "duration":duration};
 		$.ajax({
@@ -115,6 +126,44 @@ window.onload=init;
 	<br />
 	<input type="radio" name="mygroup2" id="yes" value="yes" />
 	<label for="yes">Yes</label> 
+	
+	<br />
+	<br />
+	
+	<h3>What describes your sex best?</h3>
+	<input type="radio" name="mygroup3" id="male" value="male" checked />
+	<label for="male">Male</label> 
+	<br />
+	<br />
+	<input type="radio" name="mygroup3" id="female" value="female" />
+	<label for="female">Female</label> 
+	<br />
+	<br />
+	<input type="radio" name="mygroup3" id="other" value="other" />
+	<label for="other">Other/Intersex</label>
+	
+	<br />
+	<br />
+	
+	<h3>Which range does your age fall into?</h3>
+	<input type="radio" name="mygroup4" id="-20" value="-20" checked />
+	<label for="-20"><20</label> 
+	<br />
+	<br />
+	<input type="radio" name="mygroup4" id="20-30" value="20-30" />
+	<label for="20-30">20-30</label> 
+	<br />
+	<br />
+	<input type="radio" name="mygroup4" id="30-40" value="30-40" />
+	<label for="30-40">30-40</label>
+	<br />
+	<br />
+	<input type="radio" name="mygroup4" id="40-50" value="40-50" />
+	<label for="40-50">40-50</label>
+	<br />
+	<br />
+	<input type="radio" name="mygroup4" id="50-" value="50-" />
+	<label for="50-">>50</label>
 	
 	<br />
 	<br />

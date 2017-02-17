@@ -12,9 +12,9 @@ var slide_images =['force2','force2-outlined','force1','','1-outlined','3','path
 'gt1','gt2','gt3','gt4','gt-nl'];
 
 var slide_texts = ['This is an example of a network diagram.<br />The nodes (circles) represent the objects of the network and the links (lines) represent the relationships between these objects.', 
-	'Connected components of a network are subsets of nodes, where any node in the subset is reachable from every other node within the same subset.<br />The network below has two connected components.',
+	'Connected components of a network are subsets of nodes, where removing one node from the subset will disconnect the subgraph.<br />(Any node in the subset is reachable from every other node within the same subset).<br />The network below has two connected components.',
 	'If we added a link between these two connected components, then we have one connected component, as shown below.',
-	'Similar to connected components, networks can have 2-connected components.<br />2-connected components are the subset of nodes that have at least two paths to every other node within the subset.<br />2-connected components are also 1-connected.',
+	'Similar to connected components, networks can have 2-connected components.<br />2-connected components are the subset of nodes, where you need to remove at least two nodes to disconnect the subgraph.<br />In other words, every node within a 2-connected component has at least two distinct paths to every other node within the subset.<br />2-connected components are also 1-connected.',
 	'This network has two 2-connected components, which are highlighted.',
 	'Let\'s consider the 2-connected component on the right.<br />All the nodes in the highlighted subset have at least two paths to every other node within this subset.',
 	'Let\'s consider these two yellow nodes; they are connected by this path.',
