@@ -91,12 +91,16 @@ elif (filename.find('dense') != -1):
     else:
         jsonname = 'users//'+str(userid)+'//dense.json'
     if (os.path.isfile(jsonname)): 
+        logfile.write('\nhere   '+jsonname+'\n')
         file = open(jsonname,'r')
         existing = json.load(file)
+        logfile.write(json.dumps(existing))
         if filename in existing:
             existing[filename].append({'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph1':input['graph1'],'graph2':input['graph2'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']})
+            logfile.write('appended   ')
         else:
             existing[filename] = [{'duration':input['duration'], 'answer':answers,'visrep':input['visrep'],'question':input['question'],'graph1':input['graph1'],'graph2':input['graph2'],'iscorrect':input['correct'],'correctanswer':input['correctanswer']}]
+        logfile.write('here')
         file.close()
         file = open(jsonname,'w')
         file.write(json.dumps(existing))
