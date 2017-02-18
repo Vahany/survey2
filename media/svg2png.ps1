@@ -1,5 +1,5 @@
-﻿cd 'C:\Users\Vahan\Desktop\survey2\media\connectivity_greymx_300'
-Get-ChildItem -Path C:\Users\Vahan\Desktop\survey2\media\connectivity_greymx_300 -File -Recurse | ForEach-Object {
+﻿cd 'C:\Users\Vahan\Desktop\survey2\media\matching_red_300'
+Get-ChildItem -Path C:\Users\Vahan\Desktop\survey2\media\matching_red_300 -File -Recurse | ForEach-Object {
  $myfilename = $_.Name
  $mysp = $myfilename.IndexOf(".")
  If($myfilename.Substring($mysp) -eq ".svg") {

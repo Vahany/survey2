@@ -72,14 +72,14 @@ d3.json("data/users.json",function(users){
 		imgidx = getidxmode(mode);
 		
 		var questions = matchingQuestions;
-		if ((mode == "cg") || (mode == "cm")) {
-			var altidx = getidxmode("cn");
-			//questions = matchingCQuestions;
-		}
-		else {
+		//if ((mode == "cg") || (mode == "cm")) {
+			//var altidx = getidxmode("cn");
+			////questions = matchingCQuestions;
+		//}
+		//else {
 			var altidx = getidxmode("nl");
 			//questions = matchingQuestions;
-		}
+		//}
 		
 		var mygraphs = [];
 		mygraphs.push(questions[parseInt(thequestion[midx])][0]);
