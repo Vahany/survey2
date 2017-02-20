@@ -1,7 +1,7 @@
-﻿cd 'C:\Users\Vahan\Desktop\survey2\media\matching_red_300'
-Get-ChildItem -Path C:\Users\Vahan\Desktop\survey2\media\matching_red_300 -File -Recurse | ForEach-Object {
+﻿cd 'C:\Users\Vahan\Desktop\survey2\media\tutorial_new_color'
+Get-ChildItem -Path C:\Users\Vahan\Desktop\survey2\media\tutorial_new_color -File -Recurse | ForEach-Object {
  $myfilename = $_.Name
- $mysp = $myfilename.IndexOf(".")
+ $mysp = $myfilename.IndexOf(".svg")
  If($myfilename.Substring($mysp) -eq ".svg") {
  $myfilename
  $mysvg = $myfilename.Substring(0,$mysp)+ ".svg"

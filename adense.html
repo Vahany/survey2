@@ -86,7 +86,7 @@ function move_on(themode){
 		if (parseInt(questionnum) < (questions.length*modenum)) {
 			window.location.replace('dense.html?mode='+String(themode)+'&question='+String(parseInt(questionnum)+1));
 		}
-		else window.location.replace('thanks.html');
+		else window.location.replace('matchingintro.html');//window.location.replace('thanks.html');
 	},1000);
 }
 

@@ -4,9 +4,14 @@ function draw_force(svg, mygid, callback) {
 
 	var mysvg = svg.append('g').attr("id",mygid);
 	
-	mygraph.nodes.forEach(function(node){
-		node.x = 100;
-		node.y = 100;
+	mygraph.nodes.forEach(function(node,i){
+		//if (i ==0){
+			//node.fixed = true;
+		//}
+			
+		//node.x = (i*20)+50;
+		//node.y = 50;
+		
 		
 	});
 	var force = d3.layout.force()
@@ -14,6 +19,8 @@ function draw_force(svg, mygid, callback) {
 		.nodes(mygraph.nodes)
 		.on("tick", tick)
 		.links(mygraph.links);
+		
+	
 
 	force.linkDistance(5).charge(-200);
 	var counter = 0;

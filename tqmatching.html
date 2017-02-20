@@ -13,7 +13,7 @@
 //var demo = [[11,11,41,17],[12,15,42,25],[12,6,2,12],[11,3,11,12]];
 
 //var demo = [[12,61,121,21],[12,6,2,12]];
-var demo = [[1,1,2,9],[1,21,91,1],[5,4,12,5],[5,121,51,41]];
+var demo = [[1,1,2,9],[5,4,12,5],[1,21,91,1],[5,121,51,41],[1,22,1,92],[5,52,42,122]];
 
 var start;
 var progressbarinner;
@@ -55,20 +55,20 @@ function init(){
 	
 	
 	var myurl = window.location.href;
-	mode = myurl.substring(myurl.indexOf('=')+1,myurl.indexOf('=')+3)
+	mode = myurl.substring(myurl.indexOf('mode=')+5,myurl.indexOf('mode=')+7)
 	questionnum = myurl.substring(myurl.indexOf('question=')+9);
 	
 	var intmode;
 	if (mode == "mx") intmode = 3;
 	else if (mode == "gt") intmode = 1;
-	
+	else if (mode == "cm") intmode = 5;
 	
 	var my_image = document.getElementById("0");
-	my_image.src = "images/matching_noR_300/"+String(demo[parseInt(questionnum)-1][0])+"."+String(intmode)+".png";
+	my_image.src = "images/matching/"+String(demo[parseInt(questionnum)-1][0])+"."+String(intmode)+".png";
 	var nl_image;
 	for (var ii=1; ii<=3;ii++){
 		nl_image = document.getElementById(String(ii));
-		nl_image.src = "images/matching_noR_300/"+String(demo[parseInt(questionnum)-1][ii])+".2.png";
+		nl_image.src = "images/matching/"+String(demo[parseInt(questionnum)-1][ii])+".2.png";
 	}
 	
 	
@@ -84,7 +84,7 @@ function move_on(){
 	if (image_loaded.length == 4){
 		var end = new Date().getTime();
 		var thetime = end - start;
-		window.location.replace('tamatching.html?type='+mode+'&question='+String(questionnum)+'&duration='+String(thetime));
+		window.location.replace('tamatching.html?mode='+mode+'&question='+String(questionnum)+'&duration='+String(thetime));
 	}
 }
 
@@ -93,7 +93,7 @@ function xload(elem){
 	image_loaded.push(parseInt(elem.id));
   if (image_loaded.length == 4){
 	document.getElementById("imagewrapper").style.display = "block";
-	createProgressbar('progressbar1', '40s', showmsg);
+	createProgressbar('progressbar1', '30s', showmsg);
 	document.body.onkeyup = function(e){
 		if(e.keyCode == 32){
 			move_on();
@@ -118,7 +118,7 @@ window.onload=init;
 		<div id='imagewrapper' style="display:none">
 			<div id='myimages'>
 				<div id="top">
-					<img class="survey_img" id="0"  onload="xload(this)"/>
+					<img class="survey_img_ref" id="0"  onload="xload(this)"/>
 				</div>
 
 				<div id="bottom">

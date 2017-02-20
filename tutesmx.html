@@ -26,7 +26,7 @@ var mygraph = {"nodes":[{"name":"A"},{"name":"B"},{"name":"C"},{"name":"D"},{"na
 var slide_texts = ['This is yet another representation of the same network.<br />It is called an adjacency matrix',
 'Each row and column represent a node in the network.',
 'Each cell represents a link in the network.<br />The intersection of a row and a column represents the link between those nodes.',
-'We order the rows and columns of the matrix, so that the highly connected parts of the network form visible blocks.'];
+'We order the rows and columns of the matrix,<br /> so that the highly connected parts of the network form visible blocks.'];
 
 var slides = ['matrix','nodes','links','components'];
 
@@ -41,7 +41,8 @@ var x = d3.scale.ordinal().rangeBands([0, size.width-parseInt(margin.x)]);
 //var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#feb24c'; else return '#fd8d3c';};
 //var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#fd8d3c'; else return '#e31a1c';};
 //last one is red
-var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#fd8d3c'; else return '#e31a1c';};
+//var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#fed976'; else if (d==4) return '#fd8d3c'; else return '#e31a1c';};
+var c = function(d){ if (d==1) return '#636363'; else if(d==2) return '#2b8cbe'; else if(d==3) return '#bed8f3'; else if (d==4) return '#9ecf89'; else return '#fed5a1';};
 var z = d3.scale.linear().domain([0, 1]).clamp(true);
 
 var myscale, minx, miny;
@@ -53,7 +54,10 @@ var triggered = false;
 var newfunction;
 
 
+
 function init(){
+	
+
 	var myurl = window.location.href;
 	var slidenum = myurl.substring(myurl.indexOf('slide=')+6);
 	//document.getElementById('next').disabled = true;
@@ -83,10 +87,48 @@ function init(){
 		both_drawn++;
 		myfunc(0);
 	});
-	 draw_force(svg2, "nodeg", function(){
-		both_drawn++;
-		myfunc(0);
+	 //draw_force(svg2, "nodeg", function(){
+	 d3.json("data/users.json", function(users){
+		mygraph = users.mygraph;
+		var mysvg = svg2.append('g').attr("id","nodeg").attr("transform", "scale(1.8) translate(-80, -75)");
+		var link = mysvg.selectAll('.link')
+		.data(mygraph.links)
+		.enter().append('line')
+		.style("stroke", c(1))
+		.style("stroke-width", 1)
+		.attr('class', 'link')
+		.attr('x1', function (d) { return d.source.x; })
+		.attr('y1', function (d) { return d.source.y; })
+		.attr('x2', function (d) { return d.target.x; })
+		.attr('y2', function (d) { return d.target.y; });
+				
+
+		var node = mysvg.selectAll('.node')
+			.data(mygraph.nodes)
+			.enter().append('circle')
+			.style("fill", function(d){return c(d.group);})
+			.attr('class', 'node')
+			.attr('r',  5)
+				.attr('cx', function (d) {
+					return d.x;
+				})
+				.attr('cy', function (d) {
+					return d.y;
+				});
+			
+		var label = mysvg.selectAll('text')
+			.data(mygraph.nodes)
+			.enter().append('text')
+			.text(function(d){return d.name;})
+			.style('font-size','8px')
+			.style('fill','white')
+			.attr('x', function(d) {return d.x - (5/2);}).attr('y', function(d){return d.y+ (5/2);});
+
+			both_drawn++;
+			myfunc(0);
 	 });
+	 
+	
 	 
 	 
 	function donothing(){}
@@ -144,6 +186,8 @@ function init(){
 	function changeColor(con){
 		if (both_drawn==2){
 			both_drawn = 0;
+			if (con ==0) var thetimeout = 1500;
+			else thetimeout = 4000;
 			setTimeout(function(){
 				if ((con == 3) || (triggered)){
 					//document.getElementById('next').disabled = false;
@@ -173,7 +217,7 @@ function init(){
 						changeColor(con+1);
 					});
 				}
-			},4000);
+			},thetimeout);
 		}
 	 }
 	
@@ -268,8 +312,9 @@ window.onload=init;
 <body>
 	<div class="main_div" align=center>
 		<div style="height:500px">
+		<div style="height:200px">
 		<p id="tutorialtext">This is yet another representation of the same network.<br />It is called an adjacency matrix.</p>
-		
+		</div>
 		<div id="chart" style=" font-family:Sans-Serif">
 			
 			

@@ -6,12 +6,13 @@
 <link href="vcss/general.css" rel="stylesheet" type="text/css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="src/script.js"></script>
 
 <script>
 //change this through the connectivity 1,2,3
-var demo = 12;
+var demo = [12,11,12,11,12,11,12,11,12,11];
 //change this through the connectivity 1,2,3
-var thecorrectanswer = 2;
+var thecorrectanswer = [2,3,2,3,2,3,2,3,2,3];
 //change this through the connectivity 1,2,3
 var locationname = '1';
 
@@ -19,7 +20,7 @@ var duration;
 var progressbarinner;
 var image_loaded = false;
 
-var mode;
+var mode, questionnum;
 var picked;
 
 var isnextclicked;
@@ -54,8 +55,9 @@ function init(){
 
 	isnextclicked = false;
 	var myurl = window.location.href;
-	mode = myurl.substring(myurl.indexOf('type=')+5,myurl.indexOf('type=')+7)
-	duration = myurl.substring(myurl.indexOf('duration=')+9)
+	mode = myurl.substring(myurl.indexOf('mode=')+5,myurl.indexOf('mode=')+7);
+	questionnum = myurl.substring(myurl.indexOf('question=')+9,myurl.indexOf('&duration'));
+	duration = myurl.substring(myurl.indexOf('duration=')+9);
 	//alert(mode);
 	document.getElementById('next').disabled = true;
 	//on clicking next save duration and value if value is wrong show them an alert
@@ -91,26 +93,23 @@ function init(){
 }
 
 function move_on(){
-	if (parseInt(picked)!=thecorrectanswer){
+	if (parseInt(picked)!=thecorrectanswer[parseInt(questionnum)-1]){
 		document.getElementById(picked).style.border = "5px solid red";
 		document.getElementById(picked).style.color = "red";
 		
 		setTimeout(function(){
-			window.location.replace('tqconnectivity'+locationname+'.html?type='+mode);
+			window.location.replace('tqconnectivity'+locationname+'.html?mode='+mode+'&question='+questionnum);
 		},1000);
 	}
 	else{
 		document.getElementById(picked).style.border = "5px solid green";
 		document.getElementById(picked).style.color = "green";
 		setTimeout(function(){
-			var newmode;
-			if (mode == "nl") newmode = "gt";
-			else if (mode=="gt") newmode = "mx";
-			else newmode = "no";
-			if (newmode == "no") {
+			var newmode = getnextmode(mode);
+			if (newmode == "nl") {
 				window.location.replace('connectivity'+locationname+'.html?question=1');
 			}
-			else window.location.replace('tqconnectivity'+locationname+'.html?type='+newmode);
+			else window.location.replace('tqconnectivity'+locationname+'.html?mode='+newmode+'&question='+String(parseInt(questionnum)+1));
 
 		},1000);
 	}
@@ -123,7 +122,7 @@ function save(){
 		console.log(userid);
 
 
-		var savejson = {"filename":("tconnectivity"+locationname),"userid":userid,"visrep":mode,"graph":demo,"answers":picked, "duration":duration};
+		var savejson = {"filename":("tconnectivity"+locationname),"userid":userid,"visrep":mode,"graph":demo[parseInt(questionnum)-1],"answers":picked, "duration":duration};
 		$.ajax({
 			type: 'POST',
 			url: 'cgi-bin/savetofile.py',//url of receiver file on server

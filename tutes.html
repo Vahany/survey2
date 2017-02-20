@@ -8,26 +8,27 @@
 <script src="https://d3js.org/d3.v3.min.js"></script>
 <script src="src/tute.js"></script>
 <script>
-var slide_images =['force2','force2-outlined','force1','','1-outlined','3','path1','path2','path3','path4','not2',
-'gt1','gt2','gt3','gt4','gt-nl'];
+//var slide_images =['force2','force2-outlined','force1','','1-outlined','3','path1','path2','path3','path4','not2','gt1','gt2','gt3','gt4','gt-nl'];
+
+var slide_images =['0','1','2','','3','4','5','6','7','8','9','comb_grey','comb_1','comb_2','comb_gt_nl','comb_gt_nl'];
 
 var slide_texts = ['This is an example of a network diagram.<br />The nodes (circles) represent the objects of the network and the links (lines) represent the relationships between these objects.', 
-	'Connected components of a network are subsets of nodes, where removing one node from the subset will disconnect the subgraph.<br />(Any node in the subset is reachable from every other node within the same subset).<br />The network below has two connected components.',
-	'If we added a link between these two connected components, then we have one connected component, as shown below.',
+	'Connected components of a network are subsets of nodes,<br /> where any node in the subset is reachable from every other node within the same subset.<br />The network below has two connected components encircled in blue.',
+	'If we added a link between these two connected components,<br /> then we have one connected component, as shown below.',
 	'Similar to connected components, networks can have 2-connected components.<br />2-connected components are the subset of nodes, where you need to remove at least two nodes to disconnect the subgraph.<br />In other words, every node within a 2-connected component has at least two distinct paths to every other node within the subset.<br />2-connected components are also 1-connected.',
-	'This network has two 2-connected components, which are highlighted.',
-	'Let\'s consider the 2-connected component on the right.<br />All the nodes in the highlighted subset have at least two paths to every other node within this subset.',
+	'This network has two 2-connected components, which are encircled in green.',
+	'Let\'s consider the 2-connected component on the left.<br />All the nodes in the highlighted subset have at least two paths to every other node within this subset.',
 	'Let\'s consider these two yellow nodes; they are connected by this path.',
 	'They are also connected by this path.',
 	'Similarly, if we consider these two yellow nodes; they are connected by at least two paths.',
 	'Similarly, if we consider these two yellow nodes; they are connected by at least two paths.',
 	'However these two nodes only have one path to each other and are not part of any 2-connected component.',
-	'This two images show different representations of the same network.<br />The one on the left is called a Graph Thumbnail.',
-	'If we break down the Graph Thumbnail into its different components.<br />The yellow (outermost) circle represents all the connected nodes of the network.',
-	'The light orange circles represent the 2-connected components (the subset of nodes that have at least two distinct paths to every other node within the subset). There are two 2-connected components in this network.',
+	'The Graph Thumbnail is a summary of the connectivity structure of a network.<br />These two images show different representations of the same network.<br />The one on the left is called a Graph Thumbnail.',
+	'If we break down the Graph Thumbnail into its different components.<br />The blue (outermost) circle represents all the connected nodes of the network.',
+	'The green circles represent the 2-connected components (the subset of nodes that have at least two distinct paths to every other node within the subset). There are two 2-connected components in this network.',
 	//'The dark orange circles represent the 3-connected components of a network.<br />(the subset of nodes that have at least three distinct paths to every other node within the subset).',
-	'The red circle represents the most connected component of this network.<br />(in this case, it is the subset of nodes that each have at least three neighbours within the same subset).',
-	'The size of the circles, except from the outermost one, are related to the number of nodes within that component.<br />The more connected a component is, the darker the colour of the circle is.'
+	'The orange circle represents the most connected component of this network.<br />(in this case, it is the subset of nodes that each have at least three neighbours within the same subset).',
+	'The size of each circle is relative to the number of nodes within that component.<br />The more connected a component is, the warmer the colour of the circle is.'
 	
 	
 ];
@@ -108,11 +109,11 @@ window.onload=init;
 </head>
 <body>
 	<div class="main_div" align=center>
-		<div style="height:500px">
-		
+		<div style="height:600px">
+		<div style="height:200px">
 		<p id="tutorialtext">This is an example of a network diagram.<br />The nodes (circles) represent the objects of the network and the links (lines) represent the relationships between these objects.</p>
-		
-		<img id="myimg"/>
+		</div>
+		<img id="myimg" style="height:400px"/>
 		</div>
 		<br />
 		<br />

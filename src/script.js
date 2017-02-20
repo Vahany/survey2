@@ -3,7 +3,7 @@
 //5m for dense 7x5=35+3 = 380s = 6.3m
 
 var modenum = 5;
-var numberofquestions = 7;
+var numberofquestions = 8;
 
 function getintmode(mode){
 	var intmode;
@@ -38,7 +38,7 @@ function getidxmode(mode){
 
 //-----------------------
 
-var mmodenum = 4;
+var mmodenum = 3;
 
 //var matchingQuestions = [[1,1,2,12],[2,10,7,21],[3,8,9,3],[4,4,10,71],[6,6,11,5],[10,72,91,101],[9,22,61,92]];
 //var matchingCQuestions = [[7,9,7,10],[8,3,11,8],[11,12,11,6],[5,4,5,31],[12,71,121,2],[3,32,81,71],[6,61,101,33]];
@@ -81,6 +81,6 @@ function getnextmmode(mode){
 
 
 ///**/ is the demo
-var denseQuestions = [[7,9],[6,10],[3,11],[4,5],[2,12],[2,13],[1,10],[4,12],[2,8],[10,11]];
+var denseQuestions = [[7,9],[6,11],[3,11],[4,5],[2,12],[2,8],[1,13],[4,12],[2,8],[10,12]];
 var denseLinks = [19,22,26,34,42,25,23,32,33,23,22,28,24];
-var denseAnswers = [9,6,3,5,12,13,10,4,8,10];
+var denseAnswers = [9,6,3,5,12,8,13,4,8,12];

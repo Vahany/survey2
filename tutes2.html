@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="src/tute.js"></script>
+<script>
+
+var keys = [{"label":"1-connected","color":"#bed8f3", "x1":10,"x2":20, "y":20},{"label":"2-connected","color":"#9ecf89", "x1":50,"x2":60, "y":70},{"label":"","color":"#fed5a1", "x1":100,"x2":110, "y":120},{"label":"","color":"#ffb368", "x1":150,"x2":160, "y":170},{"label":"","color":"#e1865b", "x1":200,"x2":210, "y":220}];
+
+//var slide_images =['1-outlined','3','path1','path2','path3','path4','same','spread','densewithkey','2-con-subset-fullset','eq1','eq2'];
+var slide_images =['3','samegtnl','spreadgtnl','densest','2-con-subset-fullset','eq1','eq2'];
+var slide_texts = ['2-connected components require removing at least two nodes to disconnect the component.<br />In other words, every node within a 2-connected component has at least two distinct paths to every other node within the component.<br /><br />This network has two 2-connected components, which are encircled in green.',
+	
+	'Multiple 2-connected components can be nested in one connected component.<br />For example, here we have seven 2-connected components in one connected component.',
+	'Or multiple 2-connected components can be spread and nested in different one connected components.<br />For example, here we have four 2-connected components nested in three different connected component.',
+	'The more connected a component is, the warmer the colour of the circle is.',
+	'2-connected components are also one-connected, and may be a subset of a larger 1-connected component or the same set.<br />For example, the top green circle (2-connected component) is a subset of the larger blue circle (1-connected), whereas the bottom green circle is the same set as the blue circle it is nested in. <br /> The blue circle in this case is shown by a thin crust (halo) around the green circle.',
+	'This is its equivalent node-link diagram, <br />notice how the left component is made up of only green nodes.<br /><br /><br />',
+	'Here is another example with more connected components. <br />The same principle applies.<br />The bottom orange circle is equal to the green circle (2-connected component) nesting it, which in turn is equal to the blue circle (1-connected component) nesting it.'
+];
+
+function init(){
+	var start, end;
+	var myurl = window.location.href;
+	var slidenum = myurl.substring(myurl.indexOf('slide=')+6);
+	if (slidenum == "1") document.getElementById('previous').disabled = true;
+	start = new Date().getTime();
+	var myextension = '.png';
+	
+	/*var myg = d3.select("#colorkey").append("g");
+	myg.selectAll("circle").data(keys).enter().append("circle").attr('r',15).attr('cx',function(d){return 20;}).attr('cy',function(d){return d.y;}).style(
+	"fill",function(d){return d.color});
+	myg.selectAll("text").data(keys).enter().append("text").attr('width','30').attr('height','50').attr('x',50).attr('y',function(d){return d.y+8;}).style("fill",function(d){return d.color}).text(function(d){return d.label});*/
+
+	document.getElementById('tutorialtext').innerHTML = slide_texts[parseInt(slidenum)-1];
+
+	document.getElementById('myimg').src = 'images/tutorial/'+slide_images[parseInt(slidenum)-1]+myextension;
+	
+	document.getElementById('myimg').style.visibility = ((slide_images[parseInt(slidenum)-1] == '') ? 'hidden' : 'visible');
+
+	
+	document.getElementById('previous').onclick=function(){
+		//save and do stuff then 
+		save(function(){
+			move_on(String(parseInt(slidenum)-1));
+		});
+	};
+
+	document.getElementById('next').onclick=function(){
+		//save and do stuff then 
+		save(function(){
+			move_on(String(parseInt(slidenum)+1));
+		});
+	};
+	
+	
+	function save(callback){
+		d3.json("data/users.json",function(users){
+			userid = users.usercount;
+			end = new Date().getTime();
+			var duration = end - start;
+			
+			//change filename and savetofile
+			var savejson = {"filename":"tute","slidenum":"2-"+slidenum,"userid":userid,"answers":[], "duration":duration};
+			
+			$.ajax({
+				type: 'POST',
+				url: 'cgi-bin/savetofile.py',//url of receiver file on server
+				dataType: "json",
+				data: JSON.stringify(savejson), //your data
+				success: function (response) {
+					callback();
+				}
+			});
+		});
+	}
+	
+	function move_on(newslide){
+		if (parseInt(newslide) > slide_texts.length) window.location.replace('connectivityintro2.html');
+		else window.location.replace('tutes2.html?slide='+newslide);
+	}
+
+	
+
+}
+
+
+
+
+
+window.onload=init;
+
+</script>
+
+</head>
+<body>
+	<div class="main_div" align=center>
+		<div style="height:650px">
+		<div style="height:250px">
+		<p id="tutorialtext">This is an example of a network diagram.<br />The nodes (circles) represent the objects of the network and the links (lines) represent the relationships between these objects.</p>
+		</div>
+		
+		<!--<svg id="colorkey" width="600" height="300"></svg>-->
+		
+		<img id="myimg" style="height:400px"/>
+		</div>
+		<br />
+		<br />
+		<div align=center>
+			<button type="button" id="previous">Previous</button>
+			<button type="button" id="next">Next</button>
+		</div>
+	</div>
+</body>
+</html>

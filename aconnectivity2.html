@@ -90,8 +90,9 @@ function move_on(themode, thegraph){
 		if (parseInt(questionnum) < (numberofquestions * modenum)) {
 			window.location.replace('connectivity'+String(idx+1)+'.html?mode='+String(themode)+'&graph='+String(thegraph)+'&question='+String(parseInt(questionnum)+1));
 		}
-		else //window.location.replace('connectivityintro'+String(idx+2)+'.html');
-		window.location.replace("matchingintro.html");
+		else window.location.replace('denseintro.html');//window.location.replace('connectivityintro'+String(idx+2)+'.html');
+		//window.location.replace("matchingintro.html");
+		
 	},1000);
 }
 

@@ -16,15 +16,15 @@
 //var thecorrectanswer = ['B','C'];
 //var answers = [121,12];
 
-var demo = [[1,1,2,9],[1,21,91,1],[5,4,12,5],[5,121,51,41]];
-var thecorrectanswer = ['A','C','C','B'];
-var answers = [1,1,5,51];
+var demo = [[1,1,2,9],[5,4,12,5],[1,21,91,1],[5,121,51,41],[1,22,1,92],[5,52,42,122]];
+var thecorrectanswer = ['A','C','C','B','B','A'];
+var answers = [1,5,1,51,1,52];
 
 var duration;
 var progressbarinner;
 var image_loaded = false;
 
-var mode;
+var mode, questionnum;
 var picked;
 
 var isnextclicked;
@@ -53,7 +53,7 @@ function createProgressbar(id, duration, callback) {
 function init(){
 	isnextclicked = false;
 	var myurl = window.location.href;
-	mode = myurl.substring(myurl.indexOf('type=')+5,myurl.indexOf('type=')+7)
+	mode = myurl.substring(myurl.indexOf('mode=')+5,myurl.indexOf('mode=')+7)
 	questionnum = myurl.substring(myurl.indexOf('question=')+9,myurl.indexOf('&duration'))
 	duration = myurl.substring(myurl.indexOf('duration=')+9)
 	//alert(mode);
@@ -103,8 +103,9 @@ function move_on(){
 		document.getElementById(picked).style.color = "green";
 		setTimeout(function(){
 			var newmode;
-			if (mode == "mx") newmode = "gt";
-			else if (mode=="gt") newmode = "mx";
+			if (mode == "gt") newmode = "mx";
+			else if (mode=="mx") newmode = "cm";
+			else if (mode=="cm") newmode = "gt";
 			if (questionnum == demo.length) {
 				window.location.replace('matching.html?question=1');
 			}

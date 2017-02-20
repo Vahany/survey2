@@ -6,39 +6,37 @@
 <link href="vcss/general.css" rel="stylesheet" type="text/css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
 <script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="src/script.js"></script>
 
 
 <script>
 //change this through the connectivity 1,2,3
-var demo = 12;
+//var demo = 12;
+var demo = [12,11,12,11,12,11,12,11,12,11];
+var thecorrectanswer = [2,3,2,3,2,3,2,3,2,3];
 
 var start;
 var progressbarinner;
 var image_loaded = false;
 
-var mode;
+var mode,questionnum;
 
 
 function createProgressbar(id, duration, callback) {
   // We select the div that we want to turn into a progressbar
   var progressbar = document.getElementById(id);
   progressbar.className = 'progressbar';
-
   // We create the div that changes width to show progress
   progressbarinner = document.createElement('div');
   progressbarinner.className = 'inner';
-
   // Now we set the animation parameters
   progressbarinner.style.animationDuration = duration;
-
   // Eventually couple a callback
   if (typeof(callback) === 'function') {
     progressbarinner.addEventListener('animationend', callback);
   }
-
   // Append the progressbar to the main progressbardiv
   progressbar.appendChild(progressbarinner);
-
   // When everything is set up we start the animation
   progressbarinner.style.animationPlayState = 'running';
 }
@@ -58,13 +56,12 @@ function init(){
 	
 	
 	var myurl = window.location.href;
-	mode = myurl.substring(myurl.indexOf('=')+1,myurl.indexOf('=')+3)
+	mode = myurl.substring(myurl.indexOf('mode=')+5,myurl.indexOf('mode=')+7);
+	questionnum = myurl.substring(myurl.indexOf('question=')+9);
 	
-	var intmode;
-	if (mode == "nl") intmode = 2;
-	else if (mode == "gt") intmode = 1;
-	else if (mode == "mx") intmode = 3;
-	my_image.src = "images/connectivity_noR_600/"+String(demo)+"."+String(intmode)+".png";
+	var imgidx = getidxmode(mode);
+
+	my_image.src = "images/connectivity/"+String(demo[parseInt(questionnum)-1])+"."+String(imgidx)+".png";
 	
 	my_image.onload = function () {
         image_loaded = true;       
@@ -82,7 +79,7 @@ function move_on(){
 		var end = new Date().getTime();
 		var thetime = end - start;
 		//change this through the connectivity 1,2,3
-		window.location.replace('taconnectivity1.html?type='+mode+'&duration='+String(thetime));
+		window.location.replace('taconnectivity1.html?mode='+mode+'&question='+String(questionnum)+'&duration='+String(thetime));
 	}
 }
 

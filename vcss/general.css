@@ -17,6 +17,7 @@ label{font-size:28px;}
 
 .main_div{margin-left:50px; margin-right:50px;}
 .survey_img{border:0px solid black; padding:20px}
+.survey_img_ref{width:300px; padding:20px}
 .survey_img_matching_nl{border:0px solid black; padding-left:100px; padding-bottom:0px; padding-top:100px; padding-right:100px; width:300px;}
 #tutorialtext{font-size:34px; font-family:sans-serif}
 

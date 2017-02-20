@@ -88,11 +88,11 @@ d3.json("data/users.json",function(users){
 		mygraphs.push(questions[parseInt(thequestion[midx])][order[2]]);
 		
 		var my_image = document.getElementById("0");
-		my_image.src = "images/matching_noR_300/"+String(mygraphs[0])+"."+String(imgidx)+".png";
+		my_image.src = "images/matching/"+String(mygraphs[0])+"."+String(imgidx)+".png";
 		var nl_image;
 		for (var ii=1; ii<=3;ii++){
 			nl_image = document.getElementById(String(ii));
-			nl_image.src = "images/matching_noR_300/"+String(mygraphs[ii])+"."+String(altidx)+".png";
+			nl_image.src = "images/matching/"+String(mygraphs[ii])+"."+String(altidx)+".png";
 		}
 	}
 });
@@ -138,7 +138,7 @@ function xload(elem){
 		<div id='imagewrapper' style="height:500px; display:none">
 			<div id='myimages'>
 				<div id="top" style="height:320px">
-					<img class="survey_img" id="0"  onload="xload(this)"/>
+					<img class="survey_img_ref" id="0"  onload="xload(this)"/>
 				</div>
 				<div id="bottom">
 					<img class="survey_img_matching_nl" id="1" onload="xload(this)"/>
