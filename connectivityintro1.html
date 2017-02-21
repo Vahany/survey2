@@ -11,7 +11,11 @@
 function init(){
 	
 	document.getElementById('next').onclick=function(){
-		window.location.replace('tqconnectivity1.html?type=nl');
+		window.location.replace('tqconnectivity1.html?mode=nl?question=1');
+	}
+	
+	document.getElementById('back').onclick=function(){
+		window.location.replace('tutes.html?slide=20');
 	}
 }
 
@@ -23,14 +27,14 @@ window.onload=init;
 	
 	<div class="main_div" style="margin-top:50px">
 		<div width=100% align=center>
-			<h2>Section 1/4: Connected Components</h2>
+			<h2>Section 1/4: 1-Connected Components</h2>
 		</div>
 		<div id="tutorialtext">
 		
 		<p>The next section has 50 questions. The first 10 are for training.</p>
 		<p>You will be shown a network using any of the three visual representations mentioned previously.</p>
-		<p>The networks will have 0 to 6 <strong>connected components</strong>.</p>
-		<p>You will be asked to count the number of connected components of the network.</p>
+		<p>The networks will have 0 to 6 1-connected components.</p>
+		<p>You will be asked to <strong>count the number of <span style="background-color:#bed8f3">1-connected components</span></strong> of the network.</p>
 		<p>Keep the number in mind and press space when ready to answer the question.</p>
 		<p>There is a 10 seconds timeout. Your performance will be timed.</p>
 		<p>You will be able to input your result on the following page, which will not be timed.</p>
@@ -39,7 +43,7 @@ window.onload=init;
 		</div>
 	
 	<div align=center id="buttonnext">
-		<button type="button" id="next">Next</button>
+		<button type="button" id="back">Back</button><button type="button" id="next">Next</button>
 	</div>
 		
 	</div>

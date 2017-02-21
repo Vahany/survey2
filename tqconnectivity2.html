@@ -59,6 +59,8 @@ function init(){
 	mode = myurl.substring(myurl.indexOf('mode=')+5,myurl.indexOf('mode=')+7);
 	questionnum = myurl.substring(myurl.indexOf('question=')+9);
 	
+	//document.getElementById("p"+mode).style.display = "block";
+	
 	var imgidx = getidxmode(mode);
 	my_image.src = "images/connectivity/"+String(demo[parseInt(questionnum)-1])+"."+String(imgidx)+".png";
 	
@@ -95,6 +97,15 @@ window.onload=init;
 	<div>
 	<br /><br /><br /><br />
 	<div class="main_div" align=center>
+		
+		<div style="position:absolute; background-color:none; width:300px; height:500px; left:10px; top:200px;" align=left>
+			<!--<p><strong>Hints:</strong></p>-->
+			<ul id="pnl" style="display:none"><li>Look for enclosures of nodes (cycles).</li><li>Watch out for bridge nodes that might be holding two 2-connected components together.</li></ul>
+			<ul id="pcn" style="display:none"><li>Green means 2-connected, but warmer colours mean even more connected.</li><li>Blue nodes separate 2-connected components.</li><li>Watch out for green bridge nodes that might be holding two 2-connected components together.</li></ul>
+			<ul id="pgt" style="display:none"><li>Count the green circles.</li></ul>
+			<ul id="pmx" style="display:none"><li>Count the visible blocks that are larger than 3x3.</li><li>Look for cuts at the diagonal.</li><li>Check for rows and columns that overlap with each other by more than 2 cells.</li></ul>
+			<ul id="pcm" style="display:none"><li>Count the visible blocks that are larger than 3x3.</li><li>Look for cuts at the diagonal.</li><li>Check for rows and columns that overlap with each other by more than 2 cells.</li><li>Watch out for green bridge nodes that might be holding two 2-connected components together.</li></ul>
+		</div>
 		
 		<div id='imagewrapper600' style="display:block">
 			<img class="survey_img" id="0"/>

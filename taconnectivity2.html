@@ -110,7 +110,8 @@ function move_on(){
 		document.getElementById(picked).style.color = "green";
 		setTimeout(function(){
 			var newmode = getnextmode(mode);
-			if (newmode == "nl") {
+			//if (newmode == "nl") {
+			if (questionnum == demo.length) {
 				window.location.replace('connectivity'+locationname+'.html?question=1');
 			}
 			else window.location.replace('tqconnectivity'+locationname+'.html?mode='+newmode+'&question='+String(parseInt(questionnum)+1));

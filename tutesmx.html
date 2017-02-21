@@ -90,7 +90,7 @@ function init(){
 	 //draw_force(svg2, "nodeg", function(){
 	 d3.json("data/users.json", function(users){
 		mygraph = users.mygraph;
-		var mysvg = svg2.append('g').attr("id","nodeg").attr("transform", "scale(1.8) translate(-80, -75)");
+		var mysvg = svg2.append('g').attr("id","nodeg").attr("transform", "scale(1.7) translate(-80, -75)");
 		var link = mysvg.selectAll('.link')
 		.data(mygraph.links)
 		.enter().append('line')
@@ -177,8 +177,8 @@ function init(){
 	}
 	
 	function move_on(newslide){
-		if (parseInt(newslide) > slides.length) window.location.replace('connectivityintro1.html');
-		else if (parseInt(newslide) == 0) window.location.replace('tutes.html?slide=16');
+		if (parseInt(newslide) > slides.length) window.location.replace('tutes.html?slide=16');//window.location.replace('connectivityintro1.html');
+		else if (parseInt(newslide) == 0) window.location.replace('tutes.html?slide=15');
 		else window.location.replace('tutesmx.html?slide='+newslide);
 	}
 	
@@ -313,7 +313,7 @@ window.onload=init;
 	<div class="main_div" align=center>
 		<div style="height:500px">
 		<div style="height:200px">
-		<p id="tutorialtext">This is yet another representation of the same network.<br />It is called an adjacency matrix.</p>
+		<p id="tutorialtext" align=left style="width:1250px">This is yet another representation of the same network.<br />It is called an adjacency matrix.</p>
 		</div>
 		<div id="chart" style=" font-family:Sans-Serif">
 			
