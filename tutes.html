@@ -10,13 +10,13 @@
 <script>
 //var slide_images =['force2','force2-outlined','force1','','1-outlined','3','path1','path2','path3','path4','not2','gt1','gt2','gt3','gt4','gt-nl'];
 
-var slide_images =['0','1','2','3','4','5','6','7','8','9','comb_grey','comb_1','comb_2','comb_gt_nl','comb_gt_nl_key','mx-nl0','rows2-1','rows6-7','rowsdc','fantastic5-4-key'];
+var slide_images =['0','1','2','3','4','5','6','7','8','9','comb_grey','comb_1','comb_2','comb_gt_nl_key','mx-cuts-1con','mx1-2','mx3-4','fantastic5'];
 
 var slide_texts = ['This is an example of a network diagram.<br />The nodes (circles) represent the objects of the network and the links (lines) represent the relationships between these objects.', 
-	'Connected components of a network are subsets of nodes,<br /> where any node in the subset is reachable from every other node within the same subset.<br />The network below has two connected components encircled in blue.',
-	'If we added a link between these two connected components,<br /> then we have one connected component, as shown below.',
-	'We can also have 2-connected components where at least two nodes must be removed to make the component disconnected. In other words, every node within a 2-connected component has at least two distinct paths to every other node within the subset. 2-connected components are also 1-connected.  <br>This network has two 2-connected components, which are encircled in green.',
-	'Let\'s consider the 2-connected component on the left.<br />All the nodes in the highlighted subset have at least two paths to every other node within this subset.',
+	'A network can have multiple disconnected components. <br />For example, in this case we have two components as circled in blue. <br />A component where each node is reachable by at least one distinct path of links from each other node is said to be 1-connected.',
+	'If we add a link between the components then we have a single 1-connected component, as shown below.',
+	'Components can also be 2-connected. At least two nodes must be removed to disconnect a 2-connected component. <br />In other words, every node within a 2-connected component has at least two distinct paths to every other node within the component. <br />This network has two 2-connected components, which are encircled in green.',
+	'Let\'s consider the 2-connected component on the left.<br />All the nodes in the highlighted component have at least two paths to every other node within this subset.',
 	'Let\'s consider these two yellow nodes; they are connected by this path.',
 	'They are also connected by this path.',
 	'Similarly, if we consider these two yellow nodes; they are connected by at least two paths.',
@@ -26,14 +26,12 @@ var slide_texts = ['This is an example of a network diagram.<br />The nodes (cir
 	'If we break down the Graph Thumbnail into its different components.<br />The blue (outermost) circle represents all the connected nodes of the network.',
 	'The green circles represent the 2-connected components.<br />(the subset of nodes that have at least two distinct paths to every other node within the subset).<br />There are two 2-connected components in this network.',
 	//'The dark orange circles represent the 3-connected components of a network.<br />(the subset of nodes that have at least three distinct paths to every other node within the subset).',
-	'The orange circle represents the most connected component of this network.<br />(in this case, it is the subset of nodes that each have at least three neighbours within the same subset).',
-	'The size of each circle is relative to the number of nodes within that component.<br />The more connected a component is, the warmer the colour of the circle is.',
-	'Here is another example of a matrix representation of a network, alongside its respective node-link diagram.<br />In order to find the 1-connected components in a matrix, one needs to find cuts at the diagonal with no cells extending from one side to the other.',
-	'If we consider nodes 2 and 1, then their overlap covers one coloured cell;<br />this means that nodes 2 and 1 belong to the same 1-connected component.',
-	'Nodes 6 and 7 are not connected, hence their rows in the matrix do not overlap at any coloured cells.<br />Hence nodes 6 and 7 belong to two separate 1-connected components.',
-	'Same applies for 11 and 12. Visible cuts at the diagonal hint a separate connected component, but one should check for overlapping cells away from the diagonal too.',
+	'The more connected a component is, the warmer the colour of the circle is.<br />The size of each circle is relative to the number of nodes within that component.',
+	'Here is another example of a matrix representation of a network, alongside its respective node-link diagram.<br />In order to find the 1-connected components in a matrix, one needs to find cuts between separate blocks.',
+	'Cuts are not possible if the rows and columns overlap by at least one cell.<br />For example, these two nodes must be part of the same 1-connected component since they are in overlapping blocks.',
+	'Similarly these two nodes belong to the same 1-connected component.',
 	
-	'You will see these five visual representations throughout the study.',
+	'You will see these five visual representations throughout the study.'
 	
 	
 ];
@@ -52,7 +50,7 @@ function init(){
 	
 	
 
-	if (slide_images[parseInt(slidenum)-1] == 'gt-nl') myextension = '.gif';
+	if ((slide_images[parseInt(slidenum)-1] == 'gt-nl') || (slide_images[parseInt(slidenum)-1] == 'mx-cuts-1con'))myextension = '.gif';
 	document.getElementById('myimg').src = 'images/tutorial/'+slide_images[parseInt(slidenum)-1]+myextension;
 	
 	document.getElementById('myimg').style.visibility = ((slide_images[parseInt(slidenum)-1] == '') ? 'hidden' : 'visible');
@@ -62,7 +60,7 @@ function init(){
 		//save and do stuff then 
 
 		save(function(){
-			if (parseInt(slidenum) == 16) window.location.replace('tutesmx.html?slide=4');
+			if (slide_images[parseInt(slidenum)-1] == 'mx-cuts-1con') window.location.replace('tutesmx.html?slide=4');
 			else move_on(String(parseInt(slidenum)-1));
 		});
 	};
@@ -70,7 +68,8 @@ function init(){
 	document.getElementById('next').onclick=function(){
 		//save and do stuff then 
 		save(function(){
-			move_on(String(parseInt(slidenum)+1));
+			if (slide_images[parseInt(slidenum)-1] == 'comb_gt_nl_key') window.location.replace('tutesmx.html?slide=1');
+			else move_on(String(parseInt(slidenum)+1));
 		});
 	};
 	
@@ -97,8 +96,7 @@ function init(){
 	}
 	
 	function move_on(newslide){
-		if (parseInt(newslide) == 16) window.location.replace('tutesmx.html?slide=1');
-		else if (parseInt(newslide) > slide_texts.length) window.location.replace('connectivityintro1.html');
+		if (parseInt(newslide) > slide_texts.length) window.location.replace('connectivityintro1.html');
 		else window.location.replace('tutes.html?slide='+newslide);
 	}
 

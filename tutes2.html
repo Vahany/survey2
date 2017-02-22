@@ -12,16 +12,15 @@
 var keys = [{"label":"1-connected","color":"#bed8f3", "x1":10,"x2":20, "y":20},{"label":"2-connected","color":"#9ecf89", "x1":50,"x2":60, "y":70},{"label":"","color":"#fed5a1", "x1":100,"x2":110, "y":120},{"label":"","color":"#ffb368", "x1":150,"x2":160, "y":170},{"label":"","color":"#e1865b", "x1":200,"x2":210, "y":220}];
 
 //var slide_images =['1-outlined','3','path1','path2','path3','path4','same','spread','densewithkey','2-con-subset-fullset','eq1','eq2'];
-var slide_images =['3','samegtnl','spreadgtnl','densest','2-con-subset-fullset','eq1','eq2','mx-nl0','rows2-4','rows2-3','rows2-1','rows6-7','rowsdc','rows9-1011','rows9-78','rows78-1011'];
-var slide_texts = ['2-connected components require at least two nodes to be removed to make the component disconnected.<br />In other words, every node within a 2-connected component has at least two distinct paths to every other node within the component.<br /><br />This network has two 2-connected components, which are encircled in green.',
+var slide_images =['3','samegtnl','spreadgtnl','densest','eq1','eq2','mx-cuts-2con'];//,'rows2-4','rows2-3','rows2-1','rows6-7','rowsdc','rows9-1011','rows9-78','rows78-1011'];
+var slide_texts = ['Reminder: 2-connected components require at least two nodes to be removed to make the component disconnected.<br />In other words, every node within a 2-connected component has at least two distinct paths to every other node within the component.<br /><br />This network has two 2-connected components, which are encircled in green.',
 	
-	'Multiple 2-connected components can be nested in one 1-connected component.<br />For example, here we have seven 2-connected components in one 1-connected component.',
-	'Or multiple 2-connected components can be spread and nested in different 1-connected components.<br />For example, here we have four 2-connected components nested in three different 1-connected component.',
+	'Multiple 2-connected components can be nested in one 1-connected component.<br />For example, here we have seven 2-connected components in one 1-connected component.<br /><br />Can you count the seven 2-connected components in the node-link diagram, on the right?',
+	'Or multiple 2-connected components can be spread and nested in different 1-connected components.<br />For example, here we have four 2-connected components nested in three different 1-connected component.<br /><br />Can you match the nodes on the right to the component they belong to on the left?',
 	'The more connected a component is, the warmer the colour of the circle is.',
-	'2-connected components are also 1-connected, and may be a subset of a larger 1-connected component or the same set.<br />For example, the top green circle (2-connected component) is a subset of the larger blue circle (1-connected), whereas the bottom green circle is the same set as the blue circle it is nested in. <br /> The blue circle in this case is shown by a thin outline around the green circle.',
-	'This is its equivalent node-link diagram, <br />notice how the left component is made up of only green nodes.<br /><br /><br />',
+	'<span style="font-size:18px">In a thumbnail diagram, the number of nodes in a component is indicated by the size of the circle.<br />For example, the top green circle (2-connected component) is smaller than its containing blue circle (1-connected component) and therefore includes fewer nodes than the full 1-connected component.<br />The bottom green circle is the same size as its containing blue circle (we leave the outline so the blue circle is visible). This indicates that all the nodes in the 1-connected component are 2-connected.<br />Which nodes in the node-link diagram on the right correspond to which components in the thumbnail diagram on the left?</span>',
 	'Here is another example with more connected components. <br />The same principle applies.<br />The bottom orange circle is equal to the green circle (2-connected component) containing it, which in turn is equal to the blue circle (1-connected component) containing it.',
-	'Matrix diagrams can also be used to show connected components.<br />',
+	'2-connected components can also be found in matrix diagrams.<br />In a 2 connected component, each node within a 2-connected component must overlap with each other row and column in the component by at least two cells.'];/*,
 	'In this example, nodes 2 and 4 are both in the same 2-connected component (as seen in the node-link diagram on the right).<br /> This can also be visible from the matrix.<br />For example, the two highlighted rows have two overlapping cells in the matrix and therefore are part of the same 2-connected component.',
 	'Similarly, nodes 2 and 3 belong to the same 2-connected component.',
 	'However if we consider nodes 2 and 1, then their overlap covers only one coloured cell;<br />this means that nodes 2 and 1 belong to the same 1-connected component, but not the same 2-connected component.',
@@ -32,7 +31,7 @@ var slide_texts = ['2-connected components require at least two nodes to be remo
 	'However nodes 7 and 8 only belong to the same 1-connected component as 10 and 11. <br />Nodes 7, 8, 9 and 9, 10, 11 are two separate 2-connected components.'
 	
 
-];
+];*/
 
 function init(){
 	var start, end;
@@ -41,6 +40,8 @@ function init(){
 	if (slidenum == "1") document.getElementById('previous').disabled = true;
 	start = new Date().getTime();
 	var myextension = '.png';
+	
+	if ((slide_images[parseInt(slidenum)-1] == 'mx-cuts-2con'))myextension = '.gif';
 	
 	/*var myg = d3.select("#colorkey").append("g");
 	myg.selectAll("circle").data(keys).enter().append("circle").attr('r',15).attr('cx',function(d){return 20;}).attr('cy',function(d){return d.y;}).style(
