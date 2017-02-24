@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<title>Graph Thumbnails Survey 2</title>
+<link href="vcss/general.css" rel="stylesheet" type="text/css">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="src/script.js"></script>
+<style>
+
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+.axis .domain {
+  display: none;
+}
+
+</style>
+
+<script>
+
+var userid;
+
+//var thisparticipant = {"id":1, "con1":[{"correct":true,"duration":0, "mode":"nl"}]}
+
+var tcon1 = 40, tcon2 = 40, tmatch = 30, tdense = 50;
+
+var tasks = ["con1results","con2results","denseresults","matchresults"];
+var allvisreps = ["nl","gt","mx","cn","cm"];
+var visreps = ["nl","gt","mx","cn","cm"];
+var mxvisreps = ["gt","mx","cm"];
+
+
+// JSON to CSV Converter
+function ConvertToCSV(objArray) {
+	var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+	var str = '';
+
+	for (var i = 0; i < array.length; i++) {
+		var line = '';
+		for (var index in array[i]) {
+			if (line != '') line += ','
+
+			line += array[i][index];
+		}
+
+		str += line + '\r\n';
+	}
+
+	return str;
+}
+
+
+function init(){
+	var myurl = window.location.href;
+	userid = myurl.substring(myurl.indexOf('id=')+3);
+
+	var mydata = [];
+	var mycsv = '';
+	d3.json("users/"+String(userid)+"/connectivity.json",function(data){
+		for (var i=0; i< data['connectivity1'].length; i++){
+			mydata.push({"task":"1-connected","visrep":data['connectivity1'][i].visrep,"correct":data['connectivity1'][i].iscorrect,"duration":data['connectivity1'][i].duration,"progress":parseInt(data['connectivity1'][i].question)});
+			mycsv += "1-connected, "+data['connectivity1'][i].visrep+", "+data['connectivity1'][i].iscorrect+", "+data['connectivity1'][i].duration+", "+String(parseInt(data['connectivity1'][i].question))+"<br />";
+		}
+		for (var i=0; i< data['connectivity2'].length; i++){
+			mydata.push({"task":"2-connected","visrep":data['connectivity2'][i].visrep,"correct":data['connectivity2'][i].iscorrect,"duration":data['connectivity2'][i].duration,"progress":parseInt(data['connectivity2'][i].question)+tcon1});
+			mycsv += "2-connected, "+data['connectivity2'][i].visrep+", "+data['connectivity2'][i].iscorrect+", "+data['connectivity2'][i].duration+", "+String(parseInt(data['connectivity2'][i].question)+tcon1)+"<br />";
+		}
+
+		d3.json("users/"+String(userid)+"/matching.json",function(data){
+			data['matching'].forEach(function(mch){
+				mydata.push({"task":"match","visrep":mch.visrep,"correct":mch.iscorrect,"duration":mch.duration,"progress":parseInt(mch.question)+tcon1+tcon2+tdense});
+				mycsv += "match, "+mch.visrep+", "+mch.iscorrect+", "+mch.duration+", "+String(parseInt(mch.question)+tcon1+tcon2+tdense)+"<br />";
+			});
+			d3.json("users/"+String(userid)+"/dense.json",function(data){
+				data['dense'].forEach(function(dns){
+					mydata.push({"task":"dense","visrep":dns.visrep,"correct":dns.iscorrect,"duration":dns.duration,"progress":parseInt(dns.question)+tcon1+tcon2});
+					mycsv += "dense, "+dns.visrep+", "+dns.iscorrect+", "+dns.duration+", "+String(parseInt(dns.question)+tcon1+tcon2)+"<br />";
+				});
+				
+				var jsondata = JSON.stringify(mydata);
+				document.getElementById("json").innerHTML = jsondata;
+				document.getElementById("csv").innerHTML = mycsv;
+			});
+		});
+	});
+
+}
+
+window.onload=init;
+
+
+
+
+
+</script>
+
+</head>
+<body>
+
+	<br />
+	<br />
+	<div id="main">
+		<p id="json"></p>
+		<p id="csv"></p>
+	</div>
+	
+</body>
+</html>

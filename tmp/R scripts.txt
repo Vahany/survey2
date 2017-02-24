@@ -1,0 +1,3 @@
+ mycsv <- read.table("C:\Users\Vahan\Desktop\survey2\tmp\users.csv", header = TRUE, sep = ",", row.names = 1)
+
+lm(as.formula(paste(colnames(mycsv)[3], "~", paste(colnames(mycsv)[4]), sep = "")), data=mycsv)
